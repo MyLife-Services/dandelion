@@ -250,7 +250,7 @@ async function logout(ctx){
  */
 async function loginSelect(ctx){
 	const { avatar, } = ctx.state
-	ctx.body = await avatar.hostedMembers(process.env.MYLIFE_HOSTING_KEY)
+	ctx.body = await avatar.hostedMembers(process.env.DANDELION_HOSTING_KEY)
 }
 async function members(ctx){ // members home
 	await ctx.render('members')

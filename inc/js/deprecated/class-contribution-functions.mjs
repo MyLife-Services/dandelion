@@ -1,6 +1,6 @@
 /* variables */
-const { MYLIFE_ALLOW_INTELLIGENT_QUESTIONS } = process.env
-const allowLLMQuestions = JSON.parse(MYLIFE_ALLOW_INTELLIGENT_QUESTIONS ?? 'false')
+const { DANDELION_ALLOW_INTELLIGENT_QUESTIONS } = process.env
+const allowLLMQuestions = JSON.parse(DANDELION_ALLOW_INTELLIGENT_QUESTIONS ?? 'false')
 /* contribution module functions */
 /**
  * Gets questions from Cosmos, but could request from openAI.

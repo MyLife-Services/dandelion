@@ -13,14 +13,14 @@ import chalk from 'chalk'
 /* local service imports */
 import SystemAvatar from './inc/js/mylife-factory.mjs'
 /** variables **/
-const version = '0.0.38'
+const version = '0.1.0'
 const app = new Koa()
 const port = process.env.PORT
 	?? '3000'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const _Maht = await SystemAvatar // Mylife is the pre-instantiated exported version of organization with very unique properties. MyLife class can protect fields that others cannot, #factory as first refactor will request
-if(!process.env.MYLIFE_HOSTING_KEY || process.env.MYLIFE_HOSTING_KEY !== _Maht.hosting_key)
+if(!process.env.DANDELION_HOSTING_KEY || process.env.DANDELION_HOSTING_KEY !== _Maht.hosting_key)
 	throw new Error('Invalid hosting key. Server will not start.')
 _Maht.version = version
 const MemoryStore = new session.MemoryStore()
@@ -85,7 +85,7 @@ render(app, {
 })
 setInterval(
 	checkForLiveAlerts,
-	JSON.parse(process.env.MYLIFE_SYSTEM_ALERT_CHECK_INTERVAL ?? '60000')
+	JSON.parse(process.env.DANDELION_SYSTEM_ALERT_CHECK_INTERVAL ?? '60000')
 )
 /* upload directory */
 const uploadDir = path.join(__dirname, '.tmp')
@@ -99,7 +99,7 @@ app.context.menu = _Maht.menu
 app.context.MemoryStore = MemoryStore
 app.context.mcpSessionMeta ??= new Map()
 app.keys = [
-	process.env.MYLIFE_SESSION_KEY
+	process.env.DANDELION_SESSION_KEY
 		?? `mylife-session-failsafe|${ _Maht.newGuid }`
 ]
 app.use(async (ctx, next) => {
@@ -107,7 +107,7 @@ app.use(async (ctx, next) => {
       multipart: true,
       formidable: {
         keepExtensions: true,
-        maxFileSize: parseInt(process.env.MYLIFE_EMBEDDING_SERVER_FILESIZE_LIMIT_ADMIN) || 10485760,
+        maxFileSize: parseInt(process.env.DANDELION_EMBEDDING_SERVER_FILESIZE_LIMIT_ADMIN) || 10485760,
         uploadDir: uploadDir,
         onFileBegin: (name, file) => {
           const { filepath, mimetype, newFilename, originalFilename, size } = file
@@ -130,7 +130,7 @@ app.use(async (ctx, next) => {
 		session(	//	session initialization
 			{
 				key: 'mylife.sid',   // cookie session id
-				maxAge: parseInt(process.env.MYLIFE_SESSION_TIMEOUT_MS) || 900000, // session lifetime in milliseconds
+				maxAge: parseInt(process.env.DANDELION_SESSION_TIMEOUT_MS) || 900000, // session lifetime in milliseconds
 				autoCommit: true,
 				overwrite: true,
 				httpOnly: false,

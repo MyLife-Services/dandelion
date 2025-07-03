@@ -16,7 +16,7 @@ const mA2AProviders = [
             endpoint: 'https://nanda-agent.org/a2a/',
             auth: {
                 scheme: 'bearer',
-                token: process.env.MYLIFE_NANDA_SHARED_TOKEN ?? null,
+                token: process.env.DANDELION_NANDA_SHARED_TOKEN ?? null,
                 scope: 'interests.read'
             }
         }
@@ -220,7 +220,7 @@ async function a2aCard(ctx){
         card.endpoints.adaptive_resolver.url = makeUrlAbsolute(card.endpoints.adaptive_resolver.url)
     if(card?.url && !card.url.startsWith('http'))
         card.url = makeUrlAbsolute(card.url)
-    card.provider.url = process.env.MYLIFE_ORIGIN
+    card.provider.url = process.env.DANDELION_ORIGIN
         ?? 'https://humanremembranceproject.org'
     ctx.body = card
 }
@@ -529,7 +529,7 @@ function historyLogItem(ctx, messageId, data){
  */
 function makeUrlAbsolute(url){
     if(url?.length && !url.startsWith('http')){
-        const origin = process.env.MYLIFE_ORIGIN
+        const origin = process.env.DANDELION_ORIGIN
             ?? 'https://humanremembranceproject.org'
         if(!origin.endsWith('/') && !url.startsWith('/'))
             url = origin + '/' + url

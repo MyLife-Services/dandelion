@@ -18,7 +18,7 @@ import { mcpClientAllowsDirectory, mcpClientAllowsRequest, mcpClientRequest, } f
 /* module constants */
 const __dirpath = fileURLToPath(import.meta.url)
 const mAllowSave = JSON.parse(
-    process.env.MYLIFE_DB_ALLOW_SAVE
+    process.env.DANDELION_DB_ALLOW_SAVE
         ?? 'false'
 )
 const mDefaultRoutinePath = path.resolve(path.dirname(__dirpath), '..', 'json-schemas/routines/') + '/'

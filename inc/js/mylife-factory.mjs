@@ -20,7 +20,7 @@ import Menu from './menu.mjs'
 const {
 	MAHT_EMAIL,
 	MAHT_EMAIL_PASSWORD,
-	MYLIFE_SERVER_MBR_ID: mPartitionId,
+	DANDELION_SERVER_MBR_ID: mPartitionId,
 } = process.env
 const mDataservices = await new Dataservices(mPartitionId).init()
 const mBotInstructions = {}
@@ -882,7 +882,7 @@ class AgentFactory extends BotFactory {
 		return this.#exposedSchemas
 	}
 	get urlEmbeddingServer(){
-		return process.env.MYLIFE_EMBEDDING_SERVER_URL+':'+process.env.MYLIFE_EMBEDDING_SERVER_PORT
+		return process.env.DANDELION_EMBEDDING_SERVER_URL+':'+process.env.DANDELION_EMBEDDING_SERVER_PORT
 	}
 }
 class MyLifeFactory extends AgentFactory {

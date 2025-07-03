@@ -2,7 +2,7 @@
 //	imports
 import axios from 'axios'
 /* variables */
-const { MYLIFE_EMBEDDING_SERVER_BEARER_TOKEN: bearerToken, MYLIFE_EMBEDDING_SERVER_PORT: pgPort, MYLIFE_EMBEDDING_SERVER_URL: pgUrl, } = process.env
+const { DANDELION_EMBEDDING_SERVER_BEARER_TOKEN: bearerToken, DANDELION_EMBEDDING_SERVER_PORT: pgPort, DANDELION_EMBEDDING_SERVER_URL: pgUrl, } = process.env
 /**
  * Data service connector for mylife-embedding-services.
  * @class
