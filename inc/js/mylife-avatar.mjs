@@ -638,7 +638,7 @@ class Avatar extends EventEmitter {
     }
     /**
      * Get MCP tools for bot.
-     * @todo - convert "mylife_" nodes into one "mylife" node with sub-objects
+     * @todo - convert "dandelion_" nodes into one "mylife" node with sub-objects
      * @param {string} type - The type of tools to retrieve, defaults to `avatar`
      * @param {boolean} allowAny - Whether to allow tools of type `any`, defaults to `true`
      * @returns {Array} - The array of MCP tools
@@ -647,8 +647,8 @@ class Avatar extends EventEmitter {
         type = type.split('-').pop()
         const mcpTools = mMcpTools
             .filter(tool=>
-                    tool.mylife_bots?.includes(type)
-                || ( allowAny && tool.mylife_bots?.includes('any'))
+                    tool.dandelion_bots?.includes(type)
+                || ( allowAny && tool.dandelion_bots?.includes('any'))
             )
         return mcpTools
     }
@@ -1698,7 +1698,7 @@ class Q extends Avatar {
         jsonrpc: mJsonRpcVersion,
         prompts: [
             {
-                name: 'mylife_company_information',
+                name: 'dandelion_company_information',
                 description: 'Ask Q, our corporate intelligence, about MyLife, the nonprofit humanist member organization. Include the type of information requested for more precise results.',
                 arguments: [
                     {
@@ -1956,7 +1956,7 @@ class Q extends Avatar {
                 }
                 success = !!result
                 break
-            case 'mylife_information':
+            case 'dandelion_information':
                 const { question, questionType, } = mcpData
                 let message = question
                 if(questionType?.length)
@@ -2024,7 +2024,7 @@ class Q extends Avatar {
                 }
                 break
             case 'logout':
-            case 'mylife_logout':
+            case 'dandelion_logout':
                 this.logout(ctx)
                 result = {
                     content: [{
@@ -2307,12 +2307,12 @@ class Q extends Avatar {
     get mcp(){
         const mcp = this.#mcp
         if(!mcp?.tools?.length)
-            this.#mcp.tools = mMcpTools.filter(tool=>tool.mylife_system_access === true)
+            this.#mcp.tools = mMcpTools.filter(tool=>tool.dandelion_system_access === true)
         return mcp
     }
     get mcpProxy(){
         const mcp = super.mcp
-        mcp.tools = mcp.tools.filter(tool=>tool.mylife_auth_required===false)
+        mcp.tools = mcp.tools.filter(tool=>tool.dandelion_auth_required===false)
         return mcp
     }
 	get menu(){
@@ -2588,7 +2588,7 @@ async function mMcpFunction(functionName, mcpData, sessionMeta, ctx, factory, av
         mcp_obscure,
         mcp_switch_bot,
     }
-    functionName = functionName.replace('mylife_', '')
+    functionName = functionName.replace('dandelion_', '')
     functionName = functionName.replace('mcp_', '')
     const mcpFunctionName = 'mcp_' + functionName
     if(mcpFunctions[mcpFunctionName]) // fx from local map

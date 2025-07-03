@@ -17,7 +17,7 @@
         },
         "required": ["itemId"]
     },
-    "mylife_bots": [
+    "dandelion_bots": [
         "avatar",
         "biographer",
         "diary",

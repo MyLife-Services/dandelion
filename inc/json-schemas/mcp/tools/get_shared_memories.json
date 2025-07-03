@@ -12,7 +12,7 @@
         "properties": {},
         "required": []
     },
-    "mylife_system_access": true,
+    "dandelion_system_access": true,
     "name": "get_shared_memories",
     "outputSchema": {
         "type": "object",

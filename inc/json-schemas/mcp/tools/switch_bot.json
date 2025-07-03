@@ -29,7 +29,7 @@
 		},
 		"required": ["type"]
 	},
-    "mylife_bots": [
+    "dandelion_bots": [
         "any"
     ],
     "name": "switch_bot",

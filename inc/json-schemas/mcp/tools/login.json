@@ -24,8 +24,8 @@
             "passphrase"
         ]
 	},
-	"mylife_auth_required": false,
-	"mylife_bots": [
+	"dandelion_auth_required": false,
+	"dandelion_bots": [
         "any"
     ],
     "name": "login"

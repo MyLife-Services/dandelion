@@ -410,7 +410,7 @@ async function mMcpCall(ctx, mcp){
                     if(!Avatar.isMyLife)
                         break
                     switch(name){
-                        case 'mylife_company_information':
+                        case 'dandelion_company_information':
                             const { infoType, } = args
                             result = {
                                 description: `Ask MyLife's corporate intelligence, _Q_, about our nonprofit organization.`,
@@ -552,7 +552,7 @@ async function mMcpCall(ctx, mcp){
                         }
                         break
                     }
-                    if(requestType!=='system' && ['mylife_login', 'login'].includes(name)){
+                    if(requestType!=='system' && ['dandelion_login', 'login'].includes(name)){
                         const { result: loginResult, toolListChanged: mcpLoginToolListChanged=false, } = await mMcpLogin(ctx, transportEntry, args, jsonrpc, id)
                         toolListChanged = mcpLoginToolListChanged
                         if(loginResult)
@@ -629,8 +629,8 @@ async function mMcpCall(ctx, mcp){
                     toolsList = toolsList
                         .filter(tool=>( // @todo - push to security layer or avatar
                                 isSystem
-                            ||  !locked && (tool.mylife_auth_required ?? true)===true
-                            ||  (locked && tool.mylife_auth_required===false)
+                            ||  !locked && (tool.dandelion_auth_required ?? true)===true
+                            ||  (locked && tool.dandelion_auth_required===false)
                         ))
                         .map(tool=>{ // @todo - send to function, should validate mcp `message`
                             const rest = Object.keys(tool)
@@ -861,7 +861,7 @@ async function mMcpLogin(ctx, transport, args, jsonrpc, id){
             }]
         }
     } catch(e) {
-        console.log(chalk.red('mylife_login::ERROR'), args, ctx.body, e)
+        console.log(chalk.red('dandelion_login::ERROR'), args, ctx.body, e)
     }
     return {
         result,

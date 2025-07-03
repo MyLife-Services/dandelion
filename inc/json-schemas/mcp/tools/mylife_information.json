@@ -37,6 +37,6 @@
         },
         "required": ["question"]
     },
-    "name": "mylife_information",
-    "mylife_system_access": true
+    "name": "dandelion_information",
+    "dandelion_system_access": true
 }
