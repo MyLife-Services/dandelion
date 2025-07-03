@@ -18,8 +18,8 @@ import LLMServices from './llm-services.mjs'
 import Menu from './menu.mjs'
 /* module constants */
 const {
-	MAHT_EMAIL,
-	MAHT_EMAIL_PASSWORD,
+	Q_EMAIL,
+	Q_EMAIL_PASSWORD,
 	DANDELION_SERVER_MBR_ID: mPartitionId,
 } = process.env
 const mDataservices = await new Dataservices(mPartitionId).init()
@@ -44,8 +44,8 @@ const mLLMServices = new LLMServices()
 const mMailer = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: MAHT_EMAIL,        // e.g., maht@humanremembranceproject.org
-        pass: MAHT_EMAIL_PASSWORD,   // App-specific password or OAuth token
+        user: Q_EMAIL,        // e.g., dandelion@humanremembranceproject.org
+        pass: Q_EMAIL_PASSWORD,   // App-specific password or OAuth token
     }
 })
 const mNewGuid = ()=>Guid.newGuid().toString()
@@ -1042,7 +1042,7 @@ class DandelionFactory extends AgentFactory {
 			registration = await this.#dataservices.pushItem(candidate, 'registration')
 			const { id, } = registration
 			await mMailer.sendMail({
-				from: `"Dandelion Corporate Intelligence, Q" <${ process.env.MAHT_EMAIL }>`,
+				from: `"Dandelion Corporate Intelligence, Q" <${ process.env.Q_EMAIL }>`,
 				to: email,
 				subject: '✅ Welcome to Dandelion! Validate your email, please',
 				html: `<p>Hello ${ humanName },</p>

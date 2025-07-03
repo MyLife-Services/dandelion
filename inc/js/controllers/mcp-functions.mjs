@@ -872,7 +872,7 @@ async function mMcpLogin(ctx, transport, args, jsonrpc, id){
  * Handles MCP sampling requests.
  * @documentation https://modelcontextprotocol.io/specification/2025-03-26/client/sampling
  * @param {object} originalRequest - Original request object
- * @param {string} explanation - MyLife request string
+ * @param {string} explanation - Dandelion request string
  * @param {string} instructions - Additional instructions for the sample (optional)
  * @param {string} id - Unique identifier for the sample (optional, will generate if not provided)
  * @param {function|object|string} callback - Callback function to handle the sampling response (optional)

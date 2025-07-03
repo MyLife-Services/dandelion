@@ -1725,9 +1725,9 @@ class Q extends Avatar {
                 mimeType: 'application/pdf',
             },
             {
-                uri: 'https://github.com/MyLife-Services/mylife-maht/',
-                name: 'Dandelion-MAHT GIT codebase',
-                description: 'Dandelion MAHT codebase, written in Node.js',
+                uri: 'https://github.com/MyLife-Services/dandelion',
+                name: 'Dandelion GIT codebase',
+                description: 'Dandelion codebase, written in Node.js',
                 mimeType: 'text/html',
             }
         ],

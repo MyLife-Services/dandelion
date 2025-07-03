@@ -1,5 +1,5 @@
 /* module constants */
-const mBot_idOverride = process.env.OPENAI_MAHT_GPT_OVERRIDE
+const mBot_idOverride = process.env.OPENAI_Q_GPT_OVERRIDE
 const mDefaultBotTypeArray = ['personal-avatar', 'avatar']
 const mDefaultBotType = mDefaultBotTypeArray[0]
 const mDefaultGreeting = 'avatar' // greeting routine

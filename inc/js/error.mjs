@@ -1,4 +1,4 @@
-class MylifeSystemError {
+class DandelionSystemError {
 //	public functions
 	constructor(err){
 		this.error = {}
@@ -8,4 +8,4 @@ class MylifeSystemError {
 	}
 }
 //	exports
-export default MylifeSystemError
+export default DandelionSystemError

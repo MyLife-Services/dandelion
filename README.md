@@ -4,8 +4,6 @@
 
 ## Overview
 
-[![Build and deploy Node.js app to Azure Web App - maht](https://github.com/MyLife-Services/mylife-maht/actions/workflows/azure-deploy-prod_maht.yml/badge.svg?branch=azure-deploy-prod)](https://github.com/MyLife-Services/mylife-maht/actions/workflows/azure-deploy-prod_maht.yml)
-
 ### Dandelion: Preserving Member Stories for Posterity
 
 Dandelion is a groundbreaking initiative aimed at capturing and preserving the essence of human experiences for future generations. We believe in the power of personal stories, memories, and media to shape our understanding of the human condition. Our platform provides a unique, enduring, and internet-based solution for individuals to record and showcase their life stories.
@@ -36,8 +34,8 @@ Dandelion Member Services are currently in closed alpha, but rolling admission t
 ## Table of Contents
 
 - [Overview](#overview)
-  - [Dandelion](#mylife-preserving-member-stories-for-posterity)
-  - [Dandelion Member Services](#mylife-member-services)
+  - [Dandelion](#dandelion-preserving-member-stories-for-posterity)
+  - [Dandelion Member Services](#dandelion-member-services)
 - [Features](#features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -116,8 +114,8 @@ Before you begin, ensure you have the following installed on your machine:
 1. **Clone the repository**: First, clone the Dandelion Member Services repository to your local machine using Git. Open your terminal, navigate to the directory where you want to store the project, and run:
 
    ```bash
-   git clone https://github.com/Dandelion-Services/mylife-maht.git
-   cd mylife-maht
+   git clone https://github.com/MyLife-Services/dandelion.git
+   cd dandelion
    ```
 
 2. **Install dependencies**: Once you have the project on your machine, you need to install its dependencies. Run the following command in the root directory of the project:
@@ -128,7 +126,7 @@ Before you begin, ensure you have the following installed on your machine:
 
    This command reads the `package.json` file and installs all the required Node.js packages listed in it.
 
-3. **Environment Setup**: The application requires an environment setup. Create a `.env` file in the root of your project and add the necessary environment variables. Refer to the provided `.env.example` file for required keys. Dandelion plans to offer self-retrieval keys for any data transfers, but for the time being, if you wish to run a hosted solution for friends, family or other community congregation, you will have to be vetted internally by connectingm with our technical leads @stratfordCircle Steve Kenney or @Mookse Erik Jespersen also reachable at <mylife.president@gmail.com>.
+3. **Environment Setup**: The application requires an environment setup. Create a `.env` file in the root of your project and add the necessary environment variables. Refer to the provided `.env.example` file for required keys. Dandelion plans to offer self-retrieval keys for any data transfers, but for the time being, if you wish to run a hosted solution for friends, family or other community congregation, you will have to be vetted internally by connecting with our technical leads @stratfordCircle Steve Kenney or @Mookse Erik Jespersen also reachable at <erikj@humanremembranceproject.org>.
 
 4. **Run the application**: After installing the dependencies and setting up the environment, you can start the application.
 
@@ -161,15 +159,15 @@ Dandelion itself is an open-source project and, aside from LLM technologies at t
    - Utilizes Koa.js, a web framework for Node.js, which is known for its lightweight and modular nature. Koa's middleware stack flows in a stack-like manner, allowing for more expressive and robust server-side development.
 
 2. **Data Handling and Services**
-   - The application uses Azure Cosmos DB and PostgreSQL databases for data management, as indicated in the `mylife-data-service.js` file.
+   - The application uses Azure Cosmos DB and PostgreSQL databases for data management, as indicated in the `dataservices.mjs` file.
    - It employs a data service layer (`Dataservices` class) to manage interactions with the data layers, offering methods for CRUD operations, handling avatars, bots, alerts, and other core elements.
 
 3. **Bot Functionality and Intelligence Management**
    - The application features a sophisticated bot system, capable of creating and managing different types of bots like personal assistants, biographers, health bots, etc.
-   - OpenAI's GPT-3 model is integrated for generating responses and interacting with users through bots, as observed in the `mylife-avatar.mjs` and `mylife-factory.mjs` files.
+   - OpenAI's GPT-3 model is integrated for generating responses and interacting with users through bots, as observed in the `avatar.mjs` and `factory.mjs` files.
 
 4. **Session Management**
-   - Managed through the `MylifeMemberSession` class, handling user sessions, consents, and alerts.
+   - Managed through the Koa Session, for extensibility, an app managed variable: `app.context.mcpSessionMeta` contains all of the active transports and unique information to connect multiple streams to one session.
    - Utilizes EventEmitter for managing and emitting custom events.
 
 5. **Routing and API Handling**
@@ -236,7 +234,7 @@ SOFTWARE.
 ### Contact
 
 You may contact either Erik Jespersen @Mookse or Steve Kenney @stratfordCircle at github with any technical questions.
-Additionally, you could visit the main [Dandelion website](https://humanremembranceproject.org) at <mylife.president@gmail.com>.
+Additionally, you could visit the main [Dandelion website](https://humanremembranceproject.org) at <erikj@humanremembranceproject.org>.
 
 ### Appendix Notes
 

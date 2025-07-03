@@ -242,7 +242,7 @@ _mcpMemberRouter.post('/mcp', mcpCall) // MCP 2025-03-26
 _mcpMemberRouter.post('/message', mcpCall)
 _mcpMemberRouter.post('/messages', mcpCall)
 /* Nanda routes */
-_nandaRouter.get('/mylife', server)
+_nandaRouter.get('/dandelion', server)
 _nandaRouter.get('/servers/:sid', server)
 _nandaRouter.get('/servers/:sid/ratings', serverRatings)
 _nandaRouter.get('/servers', servers)
