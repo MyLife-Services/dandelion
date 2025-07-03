@@ -3,7 +3,7 @@ const mBot_idOverride = process.env.OPENAI_MAHT_GPT_OVERRIDE
 const mDefaultBotTypeArray = ['personal-avatar', 'avatar']
 const mDefaultBotType = mDefaultBotTypeArray[0]
 const mDefaultGreeting = 'avatar' // greeting routine
-const mDefaultGreetings = ['Welcome to MyLife! I am here to help you!']
+const mDefaultGreetings = ['Welcome to Dandelion! I am here to help you!']
 const mDefaultTeam = 'memory'
 const mRequiredBotTypes = ['personal-avatar']
 const mTeams = [
@@ -75,8 +75,8 @@ class Bot {
 	 * @returns {Promise<Conversation>} - The Conversation instance updated with the chat exchange
 	 */
 	async chat(message, originalMessage, allowSave=true, avatar){
-		if(this.isMyLife && !this.isAvatar)
-			throw new Error('Only Q, MyLife Corporate Intelligence, is available for non-member conversation.')
+		if(this.isDandelion && !this.isAvatar)
+			throw new Error('Only Q, Dandelion Corporate Intelligence, is available for non-member conversation.')
 		const Conversation = await this.getConversation()
 		Conversation.prompt = message
 		Conversation.originalPrompt = originalMessage
@@ -191,7 +191,7 @@ class Bot {
 		await mMigrateChat(this, this.#llm)
 	}
     /**
-     * Given an itemId, obscures aspects of contents of the data record. Obscure is a vanilla function for MyLife, so does not require intervening intelligence and relies on the factory's modular LLM.
+     * Given an itemId, obscures aspects of contents of the data record. Obscure is a vanilla function for Dandelion, so does not require intervening intelligence and relies on the factory's modular LLM.
      * @param {Guid} itemId - The item id
      * @returns {Object} - The obscured item object
      */
@@ -299,8 +299,8 @@ class Bot {
 	get isBiographer(){
 		return ['personal-biographer', 'biographer'].includes(this.type)
 	}
-	get isMyLife(){
-		return this.#factory.isMyLife
+	get isDandelion(){
+		return this.#factory.isDandelion
 	}
 	get mcpTools(){
 		if(!this.isAvatar && !this.#mcpTools.length && this.tools?.length)
@@ -410,7 +410,7 @@ class BotAgent {
 	 * @returns {Promise<Boolean>} - Whether or not operation was successful
 	 */
 	async botDelete(bot_id){
-		if(this.#factory.isMyLife)
+		if(this.#factory.isDandelion)
 			return false
 		const success = await mBotDelete(bot_id, this, this.#llm, this.#factory)
 		return success
@@ -463,7 +463,7 @@ class BotAgent {
 		return Conversation
 	}
     /**
-     * Given an itemId, evaluates aspects of item summary. Evaluate content is a vanilla function for MyLife, so does not require intervening intelligence and relies on the factory's modular LLM.
+     * Given an itemId, evaluates aspects of item summary. Evaluate content is a vanilla function for Dandelion, so does not require intervening intelligence and relies on the factory's modular LLM.
      * @param {Guid} itemId - The item id
      * @returns {Object} - The Response object { instruction, responses, success, }
      */
@@ -544,7 +544,7 @@ class BotAgent {
      */
     async migrateChat(bot_id){
 		/* validate request */
-		if(this.#factory.isMyLife)
+		if(this.#factory.isDandelion)
 			throw new Error('Chats with Q cannot be migrated.')
 		const Bot = this.bot(bot_id)
 		if(!Bot)
@@ -570,8 +570,8 @@ class BotAgent {
 		if(!success)
 			return
 		this.#activeBot = Bot
-		dynamic = dynamic && !this.#factory.isMyLife
-		if(this.#factory.isMyLife)
+		dynamic = dynamic && !this.#factory.isDandelion
+		if(this.#factory.isDandelion)
 			bot_id = null
 		else {
 			const { id, type, version: versionCurrent, } = Bot
@@ -736,17 +736,17 @@ class BotAgent {
 		return this.#activeBot.greetings
 	}
 	/**
-	 * Returns whether BotAgent is employed by MyLife (`true`) or Member (`false`).
+	 * Returns whether BotAgent is employed by Dandelion (`true`) or Member (`false`).
 	 * @getter
-	 * @returns {Boolean} - Whether BotAgent is employed by MyLife, defaults to `false`
+	 * @returns {Boolean} - Whether BotAgent is employed by Dandelion, defaults to `false`
 	 */
-	get isMyLife(){
-		return this.#factory.isMyLife
+	get isDandelion(){
+		return this.#factory.isDandelion
 	}
 	/**
-	 * Retrieves list of available MyLife Teams.
+	 * Retrieves list of available Dandelion Teams.
 	 * @getter
-	 * @returns {object[]} - The array of MyLife Teams
+	 * @returns {object[]} - The array of Dandelion Teams
 	 */
 	get teams(){
         return mTeams
@@ -832,7 +832,7 @@ async function mBotCreate(avatarId, vectorstore_id, botData, llm, factory){
 	const { id: llm_id, thread_id, } = await mBotCreateLLM(validBotData, llm)
 	if(!llm_id?.length)
 		throw new Error('bot creation failed')
-	/* create in MyLife datastore */
+	/* create in Dandelion datastore */
 	validBotData.llm_id = llm_id
 	validBotData.thread_id = thread_id
 	botData = await factory.createBot(validBotData) // repurposed incoming botData
@@ -898,7 +898,7 @@ async function mBotGreetings(thread_id, llm_id, greetingPrompt=`Greet me enthusi
     return responses
 }
 /**
- * Returns MyLife-version of bot instructions.
+ * Returns Dandelion-version of bot instructions.
  * @module
  * @param {AgentFactory} factory - The Factory instance
  * @param {Object} botData - The bot proto-data
@@ -1256,16 +1256,16 @@ function mGetAIFunctions(type, globals, vectorstoreId){
 	}
 }
 /**
- * Retrieves bot types based on team name and MyLife status.
+ * Retrieves bot types based on team name and Dandelion status.
  * @modular
- * @param {Boolean} isMyLife - Whether request is coming from MyLife Q AVatar
+ * @param {Boolean} isDandelion - Whether request is coming from Dandelion Q AVatar
  * @param {*} teamName - The team name, defaults to `mDefaultTeam`
  * @returns {String[]} - The array of bot types
  */
-function mGetBotTypes(isMyLife=false, teamName=mDefaultTeam){
+function mGetBotTypes(isDandelion=false, teamName=mDefaultTeam){
 	const team = mTeams
 		.find(team=>team.name===teamName)
-	const botTypes = [...mRequiredBotTypes, ...isMyLife ? [] : team?.defaultTypes ?? []]
+	const botTypes = [...mRequiredBotTypes, ...isDandelion ? [] : team?.defaultTypes ?? []]
 	return botTypes
 }
 /**
@@ -1304,7 +1304,7 @@ async function mInit(BotAgent, bots, Avatar, factory, llm){
  * Initializes active bots based upon criteria.
  * @param {String} vectorstore_id - The Vectorstore id
  * @param {Avatar} Avatar - The Avatar instance
- * @param {AgentFactory} factory - The MyLife factory instance
+ * @param {AgentFactory} factory - The Dandelion factory instance
  * @param {LLMServices} llm - The LLMServices instance
  * @returns {Bot[]} - The array of activated and available bots
  */
@@ -1317,9 +1317,9 @@ async function mInitBots(vectorstore_id, Avatar, factory, llm){
 			return new Bot(botData, llm, factory)
 		})
 	} else {
-		if(factory.isMyLife)
-			throw new Error('MyLife bots not yet implemented')
-		const botTypes = mGetBotTypes(factory.isMyLife)
+		if(factory.isDandelion)
+			throw new Error('Dandelion bots not yet implemented')
+		const botTypes = mGetBotTypes(factory.isDandelion)
 		bots = await Promise.all(
 			botTypes.map(async type=>{
 				const botData = {

@@ -11,7 +11,7 @@ import serve from 'koa-static'
 /* misc imports */
 import chalk from 'chalk'
 /* local service imports */
-import SystemAvatar from './inc/js/mylife-factory.mjs'
+import SystemAvatar from './inc/js/factory.mjs'
 /** variables **/
 const version = '0.1.0'
 const app = new Koa()
@@ -19,7 +19,7 @@ const port = process.env.PORT
 	?? '3000'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const _Maht = await SystemAvatar // Mylife is the pre-instantiated exported version of organization with very unique properties. MyLife class can protect fields that others cannot, #factory as first refactor will request
+const _Maht = await SystemAvatar // Mylife is the pre-instantiated exported version of organization with very unique properties. Dandelion class can protect fields that others cannot, #factory as first refactor will request
 if(!process.env.DANDELION_HOSTING_KEY || process.env.DANDELION_HOSTING_KEY !== _Maht.hosting_key)
 	throw new Error('Invalid hosting key. Server will not start.')
 _Maht.version = version
@@ -169,8 +169,8 @@ app.use(async (ctx, next) => {
 	.use(async(ctx,next) => { // alert check
 		await next()
 	})
-//	.use(MyLifeMemberRouter.routes())	//	enable member routes
-//	.use(MyLifeMemberRouter.allowedMethods())	//	enable member routes
+//	.use(DandelionMemberRouter.routes())	//	enable member routes
+//	.use(DandelionMemberRouter.allowedMethods())	//	enable member routes
 	.use(serverRouter.routes())	//	enable system routes
 	.use(serverRouter.allowedMethods())	//	enable system routes
 /* post-start server functions */

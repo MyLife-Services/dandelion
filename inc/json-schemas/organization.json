@@ -20,20 +20,20 @@
 		"form": {
 			"type": "string",
 			"const": "organization",
-			"$comment": "as a core entity, should only be one (MyLife, i.e., this record for organizations"
+			"$comment": "as a core entity, should only be one (Dandelion, i.e., this record for organizations"
 		},
 		"type": {
 			"type": "string",
 			"enum": ["corporation", "foundation", "political", "organization", "club", "group", "collective", "other"],
 			"default": "organization",
-			"$comment": "I see this as the root descriptor for the organization - i.e., MyLife is a nonprofit, educational _corporation_"
+			"$comment": "I see this as the root descriptor for the organization - i.e., Dandelion is a nonprofit, educational _corporation_"
 		},
 		"categories": {
 			"type": "array",
 			"items": {
 				"type": "string",
 				"enum": ["business", "community", "education", "educational", "government", "healthcare", "nonprofit", "philanthropy", "religion", "science", "research", "technology", "corporation", "political", "foundation", "animal welfare", "startup", "member", "artist", "other"],
-				"$comment": "I see this as the root descriptor for the organization - i.e., MyLife is a _nonprofit, member, educational_ corporation"
+				"$comment": "I see this as the root descriptor for the organization - i.e., Dandelion is a _nonprofit, member, educational_ corporation"
 			}
 		},
 		"description": {
@@ -53,7 +53,7 @@
 			"items": {
 				"type": "string"
 			},
-			"$comment": "Is array to cover multiple variants of the name (e.g., MyLife, MyLife, Inc., etc.)"
+			"$comment": "Is array to cover multiple variants of the name (e.g., Dandelion, MyLife, Inc., etc.)"
 		},
 		"roadmap": {
 			"type": "string"

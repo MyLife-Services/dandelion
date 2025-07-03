@@ -2,27 +2,27 @@
 function acceptShareWarnings(ctx){
 	const { sid, } = ctx.params
 	const { avatar: Avatar, } = ctx.state
-	if(!Avatar.isMyLife)
-		return ctx.throw(401, 'Unauthorized access to MyLife memory')
+	if(!Avatar.isDandelion)
+		return ctx.throw(401, 'Unauthorized access to Dandelion memory')
 	ctx.body = Avatar.acceptShareWarnings(sid)
 }
 async function collectMemory(ctx){
 	// @todo - implement memory collection
 }
 /**
- * Deletes a share from MyLife `shares` container and associated object (get itemId from `share` itself).
+ * Deletes a share from Dandelion `shares` container and associated object (get itemId from `share` itself).
  * @param {Koa} ctx - Koa context object
  * @returns {Promise<Boolean>} - Success or failure of the operation
  */
 async function deleteShare(ctx){
 	const { sid, } = ctx.params
 	const { avatar: Avatar, } = ctx.state
-	if(Avatar.isMyLife)
-		return ctx.throw(401, 'MyLife cannot delete shares')
+	if(Avatar.isDandelion)
+		return ctx.throw(401, 'Dandelion cannot delete shares')
 	ctx.body = await Avatar.deleteShare(sid)
 }
 /**
- * Gets an owned share from MyLife `shares` container.
+ * Gets an owned share from Dandelion `shares` container.
  * @param {Koa} ctx - Koa context object
  * @returns {Promise<object>} - The MemberShare document
  */
@@ -33,7 +33,7 @@ async function getShare(ctx){
 	ctx.body = await MemberAvatar.getShare(sid)
 }
 /**
- * Gets all owned relevant shares from MyLife `shares` container, either by item or member.
+ * Gets all owned relevant shares from Dandelion `shares` container, either by item or member.
  * @param {Koa} ctx - Koa context object
  * @returns {Promise<object[]>} - The MemberShare array
  */
@@ -49,7 +49,7 @@ async function getShares(ctx){
  */
 async function endMemory(ctx){
 	const { iid, } = ctx.params
-	const { Globals, MyLife, } = ctx
+	const { Globals, Dandelion, } = ctx
 	if(!Globals.isValidGuid(iid))
 		return ctx.throw(400, 'Invalid Item ID')
 	const { avatar, } = ctx.state
@@ -57,7 +57,7 @@ async function endMemory(ctx){
 }
 async function improveMemory(ctx){
 	const { iid, } = ctx.params
-	const { Globals, MyLife, } = ctx
+	const { Globals, Dandelion, } = ctx
 	if(!Globals.isValidGuid(iid))
 		return ctx.throw(400, 'Invalid Item ID')
 	const { avatar, } = ctx.state
@@ -65,13 +65,13 @@ async function improveMemory(ctx){
 	ctx.body = await avatar.reliveMemory(iid, memberInput)
 }
 /**
- * Reliving a memory is a unique MyLife `experience` that allows a user to relive a memory from any vantage they choose. The bot by default will:
+ * Reliving a memory is a unique Dandelion `experience` that allows a user to relive a memory from any vantage they choose. The bot by default will:
  * @param {Koa} ctx - Koa context object
  * @returns {Promise<object>} - livingMemory engagement object (i.e., includes frontend parameters for engagement as per instructions for included `portrayMemory` function in LLM-speak)
  */
 async function reliveMemory(ctx){
 	const { iid } = ctx.params
-	const { Globals, MyLife, } = ctx
+	const { Globals, Dandelion, } = ctx
 	if(!Globals.isValidGuid(iid))
 		return ctx.throw(400, 'Invalid Item ID')
 	const { avatar, } = ctx.state
@@ -81,8 +81,8 @@ async function reliveMemory(ctx){
 async function shareCreate(ctx){
 	const { avatar: Avatar, } = ctx.state
 	const shareData = ctx.request.body
-	if(Avatar.isMyLife)
-		return ctx.throw(401, 'Unauthorized access to MyLife sharing system')
+	if(Avatar.isDandelion)
+		return ctx.throw(401, 'Unauthorized access to Dandelion sharing system')
 	if(shareData.id)
 		shareData.id = undefined
 	ctx.body = await Avatar.shareCreate(shareData)
@@ -90,8 +90,8 @@ async function shareCreate(ctx){
 async function shareDelete(ctx){
 	const { sid, } = ctx.params
 	const { avatar: Avatar, } = ctx.state
-	if(Avatar.isMyLife)
-		return ctx.throw(401, 'Unauthorized access to MyLife share delete')
+	if(Avatar.isDandelion)
+		return ctx.throw(401, 'Unauthorized access to Dandelion share delete')
 	ctx.body = await Avatar.deleteShare(sid)
 }
 /**
@@ -102,8 +102,8 @@ async function shareDelete(ctx){
 async function shareHeader(ctx){
 	const { sid, } = ctx.params
 	const { avatar: Avatar, } = ctx.state
-	if(!Avatar.isMyLife)
-		return ctx.throw(401, 'Unauthorized access to MyLife share header')
+	if(!Avatar.isDandelion)
+		return ctx.throw(401, 'Unauthorized access to Dandelion share header')
 	ctx.body = await Avatar.shareHeader(sid)
 }
 /**
@@ -117,18 +117,18 @@ async function shareFeedback(ctx){
 	ctx.throw(501, 'Not Implemented')
 }
 /**
- * Execute a memory `Share`; currently only shared publicly with non-MyLife members.
+ * Execute a memory `Share`; currently only shared publicly with non-Dandelion members.
  * @param {Koa} ctx - Koa context object
  * @returns {Promise<object>} - shareMemory object
  */
 async function shareMemory(ctx){
 	const { sid, } = ctx.params
-	const { Globals, MyLife, } = ctx
+	const { Globals, Dandelion, } = ctx
 	const { avatar: Avatar, } = ctx.state
 	if(!Globals.isValidGuid(sid))
 		return ctx.throw(400, 'Invalid Item ID')
-	if(!Avatar.isMyLife)
-		return ctx.throw(401, 'Unauthorized access to MyLife memory')
+	if(!Avatar.isDandelion)
+		return ctx.throw(401, 'Unauthorized access to Dandelion memory')
 	const { input, } = ctx.request.body
 	const Share = await Avatar.shareMemory(sid, input)
 	ctx.body = Share.share
@@ -141,24 +141,24 @@ async function shareMemory(ctx){
 async function shareStop(ctx){
 	const { sid, } = ctx.params
 	const { avatar: Avatar, } = ctx.state
-	if(!Avatar.isMyLife)
-		return ctx.throw(401, 'Unauthorized access to MyLife share')
+	if(!Avatar.isDandelion)
+		return ctx.throw(401, 'Unauthorized access to Dandelion share')
 	ctx.body = await Avatar.shareStop(sid)
 }
 async function shareUpdate(ctx){
 	const { sid, } = ctx.params
 	const { avatar: Avatar, } = ctx.state
 	const shareData = ctx.request.body
-	if(Avatar.isMyLife)
-		return ctx.throw(401, 'Unauthorized access to MyLife sharing system')
+	if(Avatar.isDandelion)
+		return ctx.throw(401, 'Unauthorized access to Dandelion sharing system')
 	shareData.id = sid
 	ctx.body = await Avatar.shareUpdate(shareData)
 }
 async function validateShare(ctx){
 	const { sid, } = ctx.params
 	const { avatar: Avatar, } = ctx.state
-	if(!Avatar.isMyLife)
-		return ctx.throw(401, 'Unauthorized access to MyLife share')
+	if(!Avatar.isDandelion)
+		return ctx.throw(401, 'Unauthorized access to Dandelion share')
 	ctx.body = await Avatar.validateShare(sid)
 }
 /* exports */

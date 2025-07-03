@@ -1,12 +1,12 @@
 {
     "annotations": {
-		"title": "MyLife-Create-Summary",
+		"title": "Dandelion-Create-Summary",
 		"readOnlyHint": false,
 		"destructiveHint": true,
 		"idempotentHint": true,
 		"openWorldHint": false
 	},
-    "description": "I generate a complete `item` summary with metadata elements and save it in the MyLife database. This summary should be as complete a summary as possible, including all relevant information from the `item` content. The summary should be a complete and coherent narrative that captures the essence of the member input.",
+    "description": "I generate a complete `item` summary with metadata elements and save it in the Dandelion database. This summary should be as complete a summary as possible, including all relevant information from the `item` content. The summary should be a complete and coherent narrative that captures the essence of the member input.",
     "inputSchema": {
         "type": "object",
         "properties": {
@@ -70,7 +70,7 @@
                 "type": "string"
             },
             "type": {
-                "description": "MyLife System type of `item`; currently supported types are `entry` and `memory`",
+                "description": "Dandelion System type of `item`; currently supported types are `entry` and `memory`",
                 "enum": [
                     "entry",
                     "memory"
@@ -155,7 +155,7 @@
                 "type": "string"
             },
             "type": {
-                "description": "MyLife System type of `item`; currently supported types are `entry` and `memory`",
+                "description": "Dandelion System type of `item`; currently supported types are `entry` and `memory`",
                 "enum": [
                     "entry",
                     "memory"

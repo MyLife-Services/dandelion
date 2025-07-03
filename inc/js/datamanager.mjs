@@ -1,7 +1,7 @@
 /* imports */
 //	import { DefaultAzureCredential } from "@azure/identity"
 import { CosmosClient } from '@azure/cosmos'
-import Config from './mylife-datasource-config.mjs'
+import Config from './datasource-config.mjs'
 import Globals from './globals.mjs'
 /* module constants */
 const mGlobals = new Globals()
@@ -17,7 +17,7 @@ class Datamanager {
 		const _options = {
 			endpoint: _config.endpoint,
 			key: _config.rw_id,
-			userAgentSuffix: 'mylife-services',
+			userAgentSuffix: 'dandelion-services',
 			//	aadCredentials: new DefaultAzureCredential()
 		}
 		const _client = new CosmosClient(_options)
@@ -176,7 +176,7 @@ class Datamanager {
 		return shareItem
 	}
 	/**
-	 * Registers a new candidate to MyLife membership
+	 * Registers a new candidate to Dandelion membership
 	 * @public
 	 * @param {object} _candidate { 'avatarName': string, 'email': string, 'humanName': string, }
 	 */
@@ -200,7 +200,7 @@ class Datamanager {
 	}
 	/* getters/setters */
 	/**
-	 * Returns container default for MyLife data.
+	 * Returns container default for Dandelion data.
 	*/
 	get containerDefault(){
 		return 'members'

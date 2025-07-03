@@ -6,7 +6,7 @@
       "idempotentHint": true,
       "openWorldHint": false
     },
-    "description": "Foundational instructions for how obscuration is interpreted by MyLife. This function obscures a summary so that no human names are present. It consumes text content and removes human name references, replacing them with the first letter of the name capitalized. At least one of 'obscuredSummary' or 'itemId' must be provided.",
+    "description": "Foundational instructions for how obscuration is interpreted by Dandelion. This function obscures a summary so that no human names are present. It consumes text content and removes human name references, replacing them with the first letter of the name capitalized. At least one of 'obscuredSummary' or 'itemId' must be provided.",
     "inputSchema": {
       "type": "object",
       "properties": {

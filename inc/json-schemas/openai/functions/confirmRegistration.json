@@ -1,5 +1,5 @@
 {
-  "description": "Confirm registration email provided by user with registrationId provided by MyLife",
+  "description": "Confirm registration email provided by user with registrationId provided by Dandelion",
   "name": "confirmRegistration",
   "strict": true,
   "parameters": {
@@ -11,7 +11,7 @@
         "type": "string"
       },
       "registrationId": {
-        "description": "registrationId provided by MyLife",
+        "description": "registrationId provided by Dandelion",
         "type": "string"
       }
     },

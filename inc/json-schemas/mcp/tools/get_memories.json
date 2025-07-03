@@ -1,6 +1,6 @@
 {
     "annotations": {
-        "title": "MyLife-Get-Memories",
+        "title": "Dandelion-Get-Memories",
         "readOnlyHint": true,
         "destructiveHint": false,
         "idempotentHint": true,

@@ -6,15 +6,15 @@ import nodemailer from 'nodemailer'
 import util from 'util'
 import vm from 'vm'
 import { Guid } from 'js-guid'	//	usage = Guid.newGuid().toString()
-import { Avatar, Q, } from './mylife-avatar.mjs'
-import Dataservices from './mylife-dataservices.mjs'
+import { Avatar, Q, } from './avatar.mjs'
+import Dataservices from './dataservices.mjs'
 import {
 	extendClass_consent,
     extendClass_conversation,
     extendClass_file,
 	extendClass_message,
 } from './factory-class-extenders/class-extenders.mjs'	//	do not remove, although they are not directly referenced, they are called by eval in mConfigureSchemaPrototypes()
-import LLMServices from './mylife-llm-services.mjs'
+import LLMServices from './llm-services.mjs'
 import Menu from './menu.mjs'
 /* module constants */
 const {
@@ -144,21 +144,21 @@ console.log(chalk.greenBright('schema-class-constructs'))
 console.log(mSchemas)
 /* module classes */
 class BotFactory extends EventEmitter{
-	// micro-hydration version of factory for use _by_ the MyLife server
+	// micro-hydration version of factory for use _by_ the Dandelion server
 	#dataservices
 	#llmServices = mLLMServices
 	#mbr_id
 	constructor(mbr_id, directHydration=true){
 		super()
 		this.#mbr_id = mbr_id
-		if(mIsMyLife(mbr_id) && directHydration)
-			throw new Error('MyLife server cannot be accessed as a BotFactory alone')
-		else if(mIsMyLife(this.mbr_id))
+		if(mIsDandelion(mbr_id) && directHydration)
+			throw new Error('Dandelion server cannot be accessed as a BotFactory alone')
+		else if(mIsDandelion(this.mbr_id))
 			this.#dataservices = mDataservices
 	}
 	/* public functions */
 	/**
-	 * Initialization routine required for all bot instances. Note: MyLife cannot be constructed as a botFactory, so should never be called as such.
+	 * Initialization routine required for all bot instances. Note: Dandelion cannot be constructed as a botFactory, so should never be called as such.
 	 * @param {Guid} _mbr_id 
 	 * @returns {AgentFactory} this
 	 */
@@ -173,7 +173,7 @@ class BotFactory extends EventEmitter{
 	}
 	/**
 	 * Get a bot, either by id (when known) or bot-type (default=mDefaultBotType). If bot id is not found, then it cascades to the first entity of bot-type it finds.
-	 * If caller is `MyLife` then bot is found or created and then activated via a micro-hydration.
+	 * If caller is `Dandelion` then bot is found or created and then activated via a micro-hydration.
 	 * @todo - determine if spotlight-bot is required for any animation, or a micro-hydrated bot is sufficient.
 	 * @public
 	 * @param {string} id - The bot id
@@ -243,7 +243,7 @@ class BotFactory extends EventEmitter{
 		return challengeSuccessful
 	}
 	/**
-	 * Uses proxy of Member Avatar to manage alteration for a given share. **Note:** currently leveraging MyLife General Functioneer, but could be migrated to Personal Avatar instructions after testing.
+	 * Uses proxy of Member Avatar to manage alteration for a given share. **Note:** currently leveraging Dandelion General Functioneer, but could be migrated to Personal Avatar instructions after testing.
 	 * @param {Share} Share - The Share instance
 	 * @returns {Share} - The cleaned Share instance
 	 */
@@ -290,7 +290,7 @@ class BotFactory extends EventEmitter{
 		return bot
 	}
     /**
-     * Given an itemId, evaluates aspects of item summary. Evaluate content is a vanilla function for MyLife, so does not require intervening intelligence and relies on the factory's modular LLM.
+     * Given an itemId, evaluates aspects of item summary. Evaluate content is a vanilla function for Dandelion, so does not require intervening intelligence and relies on the factory's modular LLM.
      * @param {Guid} itemId - The item id
 	 * @param {Guid} llm_id - The LLM intelligence id
      * @returns {Object} - The Response object { instruction, responses, success, }
@@ -357,7 +357,7 @@ class BotFactory extends EventEmitter{
 	async getExperience(xid){
 		if(!xid) 
 			throw new Error('factory.experience: experience id required')
-		// @todo remove restriction (?) for all experiences to be stored under MyLife `mbr_id`
+		// @todo remove restriction (?) for all experiences to be stored under Dandelion `mbr_id`
 		return await mDataservices.getItem(xid, 'system')
 	}
 	/**
@@ -370,12 +370,12 @@ class BotFactory extends EventEmitter{
 		if(!this.globals.isValidGuid(sid))
 			return
 		const share = await mDataservices.share(sid, type) // pull from system database
-		if(!this.isMyLife && share?.mbr_id!==mbr_id)
+		if(!this.isDandelion && share?.mbr_id!==mbr_id)
 			throw new Error('Share does not belong to member')
 		return share
 	}
     /**
-     * Gets all owned relevant shares from MyLife `shares` container, either by item or member.
+     * Gets all owned relevant shares from Dandelion `shares` container, either by item or member.
      * @param {Guid} itemId - The item id (optional)
      * @returns {Promise<object[]>} - The MemberShare array
      */
@@ -430,8 +430,8 @@ class BotFactory extends EventEmitter{
      * @returns {boolean} - true if passphrase reset successful.
      */
     async resetPassphrase(passphrase){
-        if(this.isMyLife)
-            throw new Error('MyLife avatar cannot reset passphrase.')
+        if(this.isDandelion)
+            throw new Error('Dandelion avatar cannot reset passphrase.')
         if(!passphrase?.length)
             throw new Error('Passphrase required for reset.')
         return await this.dataservices.resetPassphrase(passphrase)
@@ -510,11 +510,11 @@ class BotFactory extends EventEmitter{
 		return this.dataservices.globals
 	}
 	/**
-	 * Returns whether or not the factory is the MyLife server, as various functions are not available to the server and some _only_ to the server.
+	 * Returns whether or not the factory is the Dandelion server, as various functions are not available to the server and some _only_ to the server.
 	 * @returns {boolean}
 	*/
-	get isMyLife(){
-		return mIsMyLife(this.mbr_id)
+	get isDandelion(){
+		return mIsDandelion(this.mbr_id)
 	}
 	/**
 	 * Returns the ExperieceLived class definition.
@@ -553,13 +553,13 @@ class AgentFactory extends BotFactory {
 	}
 	/* public functions */
 	/**
-	 * Initialization routine required for all AgentFactory instances save MyLife server.
+	 * Initialization routine required for all AgentFactory instances save Dandelion server.
 	 * @param {string} mbr_id - Member id.
 	 * @returns {AgentFactory} this
 	 */
 	async init(mbr_id){
-		if(mIsMyLife(mbr_id))
-			throw new Error('MyLife server AgentFactory cannot be initialized, as it references module dataservices on constructor().')
+		if(mIsDandelion(mbr_id))
+			throw new Error('Dandelion server AgentFactory cannot be initialized, as it references module dataservices on constructor().')
 		await super.init(mbr_id)
 		if(this.core.openaiapikey)
 			this.#llmServices = new LLMServices(this.core.openaiapikey, this.core.openaiorgkey)
@@ -574,7 +574,7 @@ class AgentFactory extends BotFactory {
 		return missions
 	}
 	/**
-	 * Retrieves all public experiences (i.e., owned by MyLife).
+	 * Retrieves all public experiences (i.e., owned by Dandelion).
 	 * @returns {Object[]} - An array of the currently available public experiences
 	 */
 	async availableExperiences(){
@@ -657,7 +657,7 @@ class AgentFactory extends BotFactory {
 		return await this.dataservices.deleteItem(id)
 	}
     /**
-     * Deletes a share from MyLife `shares` container and associated object (get itemId from `share` itself).
+     * Deletes a share from Dandelion `shares` container and associated object (get itemId from `share` itself).
      * @param {Guid} shareId - The Share id
 	 * @param {Guid} itemId - The Item id
      * @returns {Promise<Boolean>} - Success or failure of the operation
@@ -687,7 +687,7 @@ class AgentFactory extends BotFactory {
 	}
 	/**
 	 * Retrieves member's Avatar data and creates singleton instance.
-	 * @param {AgentFactory} Factory - The AgentFactory instance; optional, defaults to MyLife
+	 * @param {AgentFactory} Factory - The AgentFactory instance; optional, defaults to Dandelion
 	 * @returns {Avatar} - The Avatar instance.
 	 */
 	async getAvatar(Factory=this){
@@ -751,7 +751,7 @@ class AgentFactory extends BotFactory {
 		return missions
 	}
 	/**
-	 * Saves a completed lived experience to MyLife.
+	 * Saves a completed lived experience to Dandelion.
 	 * @param {Object} experience - The Lived Experience Object to save.
 	 * @returns 
 	 */
@@ -798,7 +798,7 @@ class AgentFactory extends BotFactory {
 	 * @returns {boolean}  - `true` if partition key is active, `false` otherwise.
 	 */
 	async testPartitionKey(mbr_id){
-		if(!this.isMyLife)
+		if(!this.isDandelion)
 			return false
 		return await mDataservices.testPartitionKey(mbr_id)
 	}
@@ -885,17 +885,17 @@ class AgentFactory extends BotFactory {
 		return process.env.DANDELION_EMBEDDING_SERVER_URL+':'+process.env.DANDELION_EMBEDDING_SERVER_PORT
 	}
 }
-class MyLifeFactory extends AgentFactory {
+class DandelionFactory extends AgentFactory {
 	#candidate
 	#dataservices = mDataservices
 	#llmServices = mLLMServices
 	#registrant
 	constructor(){
 		super(mPartitionId)
-	} // no init() for MyLife server
+	} // no init() for Dandelion server
 	/* public functions */
 	/**
-	 * MyLife factory is able to hydrate a BotFactory instance of a Member Avatar.
+	 * Dandelion factory is able to hydrate a BotFactory instance of a Member Avatar.
 	 * @public
 	 * @param {string} mbr_id - The member id
 	 * @returns {object} - The hydrated bot instance
@@ -923,8 +923,8 @@ class MyLifeFactory extends AgentFactory {
 		return confirmed
 	}
 	/**
-	 * Set MyLife core account basics. { birthdate, passphrase, }
-	 * @todo - move to mylife agent factory
+	 * Set Dandelion core account basics. { birthdate, passphrase, }
+	 * @todo - move to dandelion agent factory
 	 * @param {string} birthdate - The birthdate of the member.
 	 * @param {string} passphrase - The passphrase of the member.
 	 * @returns {boolean} - `true` if successful
@@ -956,7 +956,7 @@ class MyLifeFactory extends AgentFactory {
 				throw new Error('mbr_id already exists')
 			const names = [humanName] // currently array of flat strings
 			updates = (updates.length ? ' ' : '')
-				+ `${ humanName } joined MyLife on ${ new Date().toDateString() }`
+				+ `${ humanName } joined Dandelion on ${ new Date().toDateString() }`
 			const validations = ['registration',] // list of passed validation routines
 			const core = {
 				avatarId,
@@ -987,7 +987,7 @@ class MyLifeFactory extends AgentFactory {
 		}
 	}
 	createItem(){
-		throw new Error('MyLife server cannot create items')
+		throw new Error('Dandelion server cannot create items')
 	}
 	/**
 	 * 
@@ -1000,7 +1000,7 @@ class MyLifeFactory extends AgentFactory {
 		return core
 	}
 	deleteItem(){
-		throw new Error('MyLife server cannot delete items')
+		throw new Error('Dandelion server cannot delete items')
 	}
 	/**
 	 * Returns Array of hosted members based on validation requirements.
@@ -1011,7 +1011,7 @@ class MyLifeFactory extends AgentFactory {
 		return await this.#dataservices.hostedMembers(validations)
 	}
 	/**
-	 * Registers a new MyLife registrant. This represents the intial contact with the MyLife system by a human candidate. The registration process is a three-step process. The first step is to 1) register the candidate; 2) validate the registration; and 3) creating a new Member account from their inputs.
+	 * Registers a new Dandelion registrant. This represents the intial contact with the Dandelion system by a human candidate. The registration process is a three-step process. The first step is to 1) register the candidate; 2) validate the registration; and 3) creating a new Member account from their inputs.
 	 * @public
 	 * @param {object} candidate { 'avatarName': string, 'email': string, 'humanName': string, }
 	 * @returns {object} - The registrant's document from Cosmos
@@ -1042,11 +1042,11 @@ class MyLifeFactory extends AgentFactory {
 			registration = await this.#dataservices.pushItem(candidate, 'registration')
 			const { id, } = registration
 			await mMailer.sendMail({
-				from: `"MyLife Corporate Intelligence, Q" <${ process.env.MAHT_EMAIL }>`,
+				from: `"Dandelion Corporate Intelligence, Q" <${ process.env.MAHT_EMAIL }>`,
 				to: email,
-				subject: '✅ Welcome to MyLife! Validate your email, please',
+				subject: '✅ Welcome to Dandelion! Validate your email, please',
 				html: `<p>Hello ${ humanName },</p>
-					<p>Thank you for registering for MyLife, the nonprofit humanist member organization dedicated to helping you tell your personal narratives for posterity. To confirm your registration, please visit:</p>
+					<p>Thank you for registering for Dandelion, the nonprofit humanist member organization dedicated to helping you tell your personal narratives for posterity. To confirm your registration, please visit:</p>
 					<p><a href="https://humanremembranceproject.org/?vld=${ id }">Click here to validate your email</a></p>`
 			})
 			.then(info=>{
@@ -1086,7 +1086,7 @@ class MyLifeFactory extends AgentFactory {
 		return memory
 	}
 	updateItem(){
-		console.log(chalk.blueBright('MyLifeFactory::updateItem()::error'), chalk.bgRed('updateItem Request, but MyLife server cannot update items'))
+		console.log(chalk.blueBright('DandelionFactory::updateItem()::error'), chalk.bgRed('updateItem Request, but Dandelion server cannot update items'))
 	}
     /**
      * Validate registration id.
@@ -1338,8 +1338,8 @@ function mGenerateClassFromSchema(_schema) {
 	return _class
 }
 /**
- * Take help request about MyLife and consults appropriate engine for response.
- * @requires mLLMServices - equivalent of default MyLife dataservices/factory
+ * Take help request about Dandelion and consults appropriate engine for response.
+ * @requires mLLMServices - equivalent of default Dandelion dataservices/factory
  * @param {string} thread_id - The thread id.
  * @param {string} bot_id - The bot id.
  * @param {string} helpRequest - The help request string.
@@ -1352,11 +1352,11 @@ async function mHelp(thread_id, bot_id, helpRequest, factory, avatar){
 	return response
 }
 /**
- * Returns whether or not the factory is the MyLife server, as various functions are not available to the server and some _only_ to the server.
+ * Returns whether or not the factory is the Dandelion server, as various functions are not available to the server and some _only_ to the server.
  * @param {string} _mbr_id 
- * @returns {boolean} true if factory is MyLife server
+ * @returns {boolean} true if factory is Dandelion server
  */
-function mIsMyLife(_mbr_id){
+function mIsDandelion(_mbr_id){
 	return _mbr_id===mPartitionId
 }
 async function mLoadSchemas(){
@@ -1494,7 +1494,7 @@ function mSanitizeSchemaReferences(properties, _mutatedKeysObject){
 				const _sanitizedKey = _mutatedKeysObject[_classReferenceName]
 					?? _mutatedKeysObject[_classReferenceName.toLowerCase()]
 				if(_sanitizedKey){
-					// set $ref to sanitized key, as that will be the actual Class Name inside MyLife. **note**: remove all '/$defs/' as there is no nesting inside `schemas`
+					// set $ref to sanitized key, as that will be the actual Class Name inside Dandelion. **note**: remove all '/$defs/' as there is no nesting inside `schemas`
 					properties['$ref'] = _sanitizedKey
 				}
 			} else if(typeof properties[_key] === 'object'){
@@ -1539,9 +1539,9 @@ function mTeam(team){
         title,
     }
 }
-// server build: injects default factory into _server_ **MyLife** instance
+// server build: injects default factory into _server_ **Dandelion** instance
 const SystemAvatar = await new Q(
-	new MyLifeFactory(), mLLMServices
+	new DandelionFactory(), mLLMServices
 )
 	.init()
 /* exports */

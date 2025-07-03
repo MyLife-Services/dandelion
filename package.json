@@ -1,7 +1,7 @@
 {
-  "name": "mylife-maht",
+  "name": "dandelion",
   "version": "1.0.0",
-  "description": "Maht is a an openai model trained on MyLife corporate private and public materials to assist the Board of Directors for MyLife in governance and growth of the organization in ethical, honest, transparent and impactful ways",
+  "description": "Maht is a an openai model trained on Dandelion corporate private and public materials to assist the Board of Directors for Dandelion in governance and growth of the organization in ethical, honest, transparent and impactful ways",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -43,7 +43,7 @@
     "agent",
     "maht"
   ],
-  "author": "MyLife",
+  "author": "Dandelion",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/MyLife-Services/mylife-maht/issues"

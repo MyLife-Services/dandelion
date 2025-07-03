@@ -4,7 +4,7 @@ class MylifeSystemError {
 		this.error = {}
 	}
 	handleError(){
-		//	mylife error wrapper
+		//	dandelion error wrapper
 	}
 }
 //	exports

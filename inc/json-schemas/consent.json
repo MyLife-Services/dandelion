@@ -22,10 +22,10 @@
 		},
 		"context": {
 			"type": "string",
-			"default": "This consent object was created by the MyLife platform to manage access to the underlying object [identified  by `parent_id`] according to owner [identified by `mbr_id`]",
+			"default": "This consent object was created by the Dandelion platform to manage access to the underlying object [identified  by `parent_id`] according to owner [identified by `mbr_id`]",
 			"maxLength": 32768,
 			"description": "Context and summary history of this consent object, and its permissions, responses and direct interactions with various members and objects",
-			"$comment": "MyLife should be capable of at least \"filling in those blanks\" for this field, all of it should be injectible from factory core"
+			"$comment": "Dandelion should be capable of at least \"filling in those blanks\" for this field, all of it should be injectible from factory core"
 		},
 		"logs": {
 			"type": "array",

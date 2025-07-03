@@ -23,7 +23,7 @@
 		"being": {
 			"type": "string",
 			"const": "asset",
-			"description": "Being for asset in MyLife"
+			"description": "Being for asset in Dandelion"
 		},
 		"type": {
 			"type": "string",
@@ -46,7 +46,7 @@
 		},
 		"context": {
 			"type": "string",
-			"default": "Text document uploaded by member ${mbr_id} to MyLife",
+			"default": "Text document uploaded by member ${mbr_id} to Dandelion",
 			"description": "Provide evolving context of underlying asset (why/where created, updated, included, curated)"
 		},
 		"purpose": {

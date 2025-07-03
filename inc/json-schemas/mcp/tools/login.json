@@ -1,12 +1,12 @@
 {
 	"annotations": {
-		"title": "MyLife-Login",
+		"title": "Dandelion-Login",
 		"readOnlyHint": true,
 		"destructiveHint": false,
 		"idempotentHint": true,
 		"openWorldHint": false
 	},
-	"description": "I am the MyLife Member Login tool. I can log you into your MyLife account.",
+	"description": "I am the Dandelion Member Login tool. I can log you into your Dandelion account.",
 	"inputSchema": {
 		"type": "object",
 		"properties": {

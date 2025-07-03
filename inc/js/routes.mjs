@@ -278,7 +278,7 @@ async function memberValidation(ctx, next){
             ctx.status = 401
             ctx.body = {
                 alert: true,
-                message: 'Your MyLife Member Session has timed out and is no longer valid. Please log in again.',
+                message: 'Your Dandelion Member Session has timed out and is no longer valid. Please log in again.',
                 redirectUrl
             }
         } else

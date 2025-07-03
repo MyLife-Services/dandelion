@@ -10,10 +10,10 @@ import AssetAgent from './agents/system/asset-agent.mjs'
 import BotAgent from './agents/system/bot-agent.mjs'
 import CollectionsAgent from './agents/system/collections-agent.mjs'
 import ConnectorAgent from './agents/system/connector-agent.mjs'
-import { Entry, Memory, } from './mylife-models.mjs'
+import { Entry, Memory, } from './models.mjs'
 import EvolutionAgent from './agents/system/evolution-agent.mjs'
 import { ExperienceAgent, ShareAgent, } from './agents/system/experience-agent.mjs'
-import LLMServices from './mylife-llm-services.mjs'
+import LLMServices from './llm-services.mjs'
 import { mcpClientAllowsDirectory, mcpClientAllowsRequest, mcpClientRequest, } from './controllers/mcp-functions.mjs'
 /* module constants */
 const __dirpath = fileURLToPath(import.meta.url)
@@ -24,7 +24,7 @@ const mAllowSave = JSON.parse(
 const mDefaultRoutinePath = path.resolve(path.dirname(__dirpath), '..', 'json-schemas/routines/') + '/'
 const mJsonRpcVersion = process.env.MCP_JSONRPC_Version,
     mJsonRpcProtocolVersion = process.env.MCP_JSONRPC_Protocol_Version,
-    mMcpConstant = 'mylife-constant.'
+    mMcpConstant = 'dandelion-constant.'
 const mMcpMap = {
     changeTitle: { /* no implicit call for this in Avatar instance */
         args: ['itemId', 'title', 'factory'],
@@ -105,7 +105,7 @@ const mMcpMap = {
             return {
                 result: {
                     content: [{
-                        text: 'You have been successfully logged out of MyLife.',
+                        text: 'You have been successfully logged out of Dandelion.',
                         type: 'text',
                     }],
                 },
@@ -123,7 +123,7 @@ const mMcpTools = await mInitializeExternalTools(
 /**
  * @class - Avatar
  * @extends EventEmitter
- * @description An avatar is a digital self proxy of Member. Not of the class but of the human themselves - they are a one-to-one representation of the human, but the synthetic version that interopts between member and internet when inside the MyLife platform. The Avatar is the manager of the member experience, and is the primary interface with the AI (aside from when a bot is handling API request, again we are speaking inside the MyLife platform).
+ * @description An avatar is a digital self proxy of Member. Not of the class but of the human themselves - they are a one-to-one representation of the human, but the synthetic version that interopts between member and internet when inside the Dandelion platform. The Avatar is the manager of the member experience, and is the primary interface with the AI (aside from when a bot is handling API request, again we are speaking inside the Dandelion platform).
  * @todo - deprecate `factory` getter
  */
 class Avatar extends EventEmitter {
@@ -155,11 +155,11 @@ class Avatar extends EventEmitter {
                 listChanged: true
             }
         },
-        instructions: 'I am a version of your avatar, and I can log you in to MyLife. Once logged in, we can work together as intended, or I can switch you to a different MyLife bot.',
+        instructions: 'I am a version of your avatar, and I can log you in to Dandelion. Once logged in, we can work together as intended, or I can switch you to a different Dandelion bot.',
         jsonrpc: mJsonRpcVersion,
         protocolVersion: mJsonRpcProtocolVersion,
         serverInfo: {
-            name: 'MyLife MCP Member Avatar',
+            name: 'Dandelion MCP Member Avatar',
             version: '1.1',
         },
     }
@@ -170,7 +170,7 @@ class Avatar extends EventEmitter {
     #vectorstoreId // vectorstore id for avatar
     /**
      * @constructor
-     * @param {MyLifeFactory|AgentFactory} factory - The factory on which avatar relies for all service interactions.
+     * @param {DandelionFactory|AgentFactory} factory - The factory on which avatar relies for all service interactions.
      * @param {LLMServices} llmServices - The LLM services object
      */
     constructor(factory, llmServices){
@@ -184,7 +184,7 @@ class Avatar extends EventEmitter {
     }
     /**
      * Initialize the Avatar class.
-     * @todo - create class-extender specific to the "singleton" MyLife avatar
+     * @todo - create class-extender specific to the "singleton" Dandelion avatar
      * @todo - rethink architecture on this/#factory and also evolver, as now would manifest more as vectorstore object
      * @async
      * @public
@@ -245,12 +245,12 @@ class Avatar extends EventEmitter {
                 .init()
     }
 	/**
-	 * Retrieves all public experiences (i.e., owned by MyLife).
+	 * Retrieves all public experiences (i.e., owned by Dandelion).
 	 * @returns {Object[]} - An array of the currently available public experiences.
 	 */
 	async availableExperiences(){
 		const experiences = ( await this.#factory.availableExperiences(this.mbr_id) )
-			.map(experience=>{ // map to display versions [from `mylife-avatar.mjs`]
+			.map(experience=>{ // map to display versions [from `dandelion-avatar.mjs`]
 				const { autoplay=false, description, id, name, purpose, skippable=true,  } = experience
 				return {
 					description,
@@ -372,8 +372,8 @@ class Avatar extends EventEmitter {
      * @note - Conversation instance is altered in place
      */
     async chatAgentBypass(Conversation){
-        if(!this.isMyLife)
-            throw new Error('Agent bypass only available for MyLife avatar.')
+        if(!this.isDandelion)
+            throw new Error('Agent bypass only available for Dandelion avatar.')
 		await this.#botAgent.chat(Conversation, mAllowSave, this)
         const responses = mPruneMessages(this.activeBotId, Conversation.getMessages(), 'chat', Conversation?.processStartTime)
         /* respond request */
@@ -465,7 +465,7 @@ class Avatar extends EventEmitter {
         return id
     }
     /**
-     * Deletes a share from MyLife `shares` container and associated object (get itemId from `share` itself).
+     * Deletes a share from Dandelion `shares` container and associated object (get itemId from `share` itself).
      * @param {Guid} sid - The Share id
      * @returns {Promise<Boolean>} - Success or failure of the operation
      */
@@ -500,7 +500,7 @@ class Avatar extends EventEmitter {
         return response
     }
 	/**
-	 * Submits a new diary or journal entry to MyLife. Currently called both from API _and_ LLM function.
+	 * Submits a new diary or journal entry to Dandelion. Currently called both from API _and_ LLM function.
      * @todo - deprecate to `item` function
 	 * @param {object} entry - Entry item object
 	 * @returns {object} - The entry document from Cosmos
@@ -520,7 +520,7 @@ class Avatar extends EventEmitter {
 		return await this.item(entry, 'POST')
 	}
     /**
-     * Given an itemId, evaluates aspects of item summary. Evaluate content is a vanilla function for MyLife, so does not require intervening intelligence and relies on the factory's modular LLM.
+     * Given an itemId, evaluates aspects of item summary. Evaluate content is a vanilla function for Dandelion, so does not require intervening intelligence and relies on the factory's modular LLM.
      * @param {Guid} itemId - The item id
      * @returns {Object} - The Response object { instruction, responses, success, }
      */
@@ -619,7 +619,7 @@ class Avatar extends EventEmitter {
         return await this.#ShareAgent.getShare(sid)
     }
     /**
-     * Gets all owned relevant shares from MyLife `shares` container, either by item or member.
+     * Gets all owned relevant shares from Dandelion `shares` container, either by item or member.
      * @param {Guid} itemId - The item id (optional)
      * @returns {Promise<object[]>} - The MemberShare array
      */
@@ -638,7 +638,7 @@ class Avatar extends EventEmitter {
     }
     /**
      * Get MCP tools for bot.
-     * @todo - convert "dandelion_" nodes into one "mylife" node with sub-objects
+     * @todo - convert "dandelion_" nodes into one "dandelion" node with sub-objects
      * @param {string} type - The type of tools to retrieve, defaults to `avatar`
      * @param {boolean} allowAny - Whether to allow tools of type `any`, defaults to `true`
      * @returns {Array} - The array of MCP tools
@@ -670,7 +670,7 @@ class Avatar extends EventEmitter {
         }
     }
     /**
-     * Request help about MyLife. **caveat** - correct avatar should have been selected prior to calling.
+     * Request help about Dandelion. **caveat** - correct avatar should have been selected prior to calling.
      * @param {string} helpRequest - The help request text.
      * @param {string} type - The type of help request.
      * @returns {Promise<Object>} - openai `message` objects.
@@ -680,7 +680,7 @@ class Avatar extends EventEmitter {
         if(!helpRequest?.length)
             throw new Error('Help request required.')
         // @stub - force-type into enum?
-        helpRequest = mHelpIncludePreamble(type, this.isMyLife) + helpRequest
+        helpRequest = mHelpIncludePreamble(type, this.isDandelion) + helpRequest
         const { thread_id, } = this.activeBot
         const { bot_id, } = this.helpBots?.find(bot=>(bot?.subType ?? bot?.sub_type ?? bot?.subtype)===type)
             ?? this.helpBots?.[0]
@@ -793,7 +793,7 @@ class Avatar extends EventEmitter {
         return await this.#factory.updateItem(item)
     }
     /**
-     * Logs out the current session, removing relevant MyLife session artifacts.
+     * Logs out the current session, removing relevant Dandelion session artifacts.
      * @param {Koa} ctx - The Koa context object
      * @returns {Promise<void>}
      */
@@ -918,7 +918,7 @@ class Avatar extends EventEmitter {
         return missions
     }
     /**
-     * Given an itemId, obscures aspects of contents of the data record. Obscure is a vanilla function for MyLife, so does not require intervening intelligence and relies on the factory's modular LLM.
+     * Given an itemId, obscures aspects of contents of the data record. Obscure is a vanilla function for Dandelion, so does not require intervening intelligence and relies on the factory's modular LLM.
      * @param {Guid} iid - The item id
      * @returns {Object} - The obscured item object
      */
@@ -961,7 +961,7 @@ class Avatar extends EventEmitter {
         return registration
     }
     /**
-     * Reliving a memory is a unique MyLife `experience` that allows a user to relive a memory from any vantage they choose.
+     * Reliving a memory is a unique Dandelion `experience` that allows a user to relive a memory from any vantage they choose.
      * @param {Guid} id - The item id
      * @param {string} memberInput - Any member input
      * @returns {Object} - livingMemory engagement object (i.e., includes frontend parameters for engagement as per instructions for included `portrayMemory` function in LLM-speak): { error, inputs, itemId, messages, processingBotId, success, }
@@ -979,8 +979,8 @@ class Avatar extends EventEmitter {
      * @returns {boolean} - true if passphrase reset successful.
      */
     async resetPassphrase(passphrase){
-        if(this.isMyLife)
-            throw new Error('MyLife avatar cannot reset passphrase.')
+        if(this.isDandelion)
+            throw new Error('Dandelion avatar cannot reset passphrase.')
         if(!passphrase?.length)
             throw new Error('Passphrase required for reset.')
         return await this.#factory.resetPassphrase(passphrase)
@@ -1129,7 +1129,7 @@ class Avatar extends EventEmitter {
         return header
     }
 	/**
-	 * Execute a memory `Share`; currently only shared publicly with non-MyLife members via Q.
+	 * Execute a memory `Share`; currently only shared publicly with non-Dandelion members via Q.
 	 * @param {Guid} sid - Share id
      * @param {String} input - Text from recipient
      * @returns {Promise<Share>} - The Share response object { error, instruction, responses, success, warnings, }
@@ -1156,7 +1156,7 @@ class Avatar extends EventEmitter {
         return await this.#ShareAgent.update(shareData)
     }
 	/**
-	 * Submits a memory to MyLife. Currently called both from API _and_ LLM function.
+	 * Submits a memory to Dandelion. Currently called both from API _and_ LLM function.
      * @todo - deprecate to `item` function
 	 * @param {object} story - Story object
 	 * @returns {object} - The story document from Cosmos
@@ -1196,7 +1196,7 @@ class Avatar extends EventEmitter {
         if(!responses?.length)
             responses.push(this.backupResponse)
         else {
-            responses = mPruneMessages(this.avatar.id, responses, 'mylife-file-summary', processStartTime)
+            responses = mPruneMessages(this.avatar.id, responses, 'dandelion-file-summary', processStartTime)
             success = true
         }
         return {
@@ -1429,7 +1429,7 @@ class Avatar extends EventEmitter {
         return this.#factory.globals
     }
     /**
-     * Get the help bots, primarily MyLife avatar, though presume there are a number of custom self-help bots that would be capable of referencing preferences, internal searches, etc.
+     * Get the help bots, primarily Dandelion avatar, though presume there are a number of custom self-help bots that would be capable of referencing preferences, internal searches, etc.
      * @getter
      * @returns {array} - The help bots.
      */
@@ -1455,12 +1455,12 @@ class Avatar extends EventEmitter {
         return this.mode==='experience'
     }
     /**
-     * Whether or not the avatar is the MyLife avatar.
+     * Whether or not the avatar is the Dandelion avatar.
      * @getter
-     * @returns {boolean} - true if the avatar is the MyLife avatar. 
+     * @returns {boolean} - true if the avatar is the Dandelion avatar. 
      */
-    get isMyLife(){
-        return this.#factory.isMyLife
+    get isDandelion(){
+        return this.#factory.isDandelion
     }
     /**
      * Get the current living experience.
@@ -1671,15 +1671,15 @@ class Avatar extends EventEmitter {
 	}
 }
 /**
- * The System Avatar singleton for MyLife.
+ * The System Avatar singleton for Dandelion.
  * @class
  * @extends Avatar
  */
 class Q extends Avatar {
-    #connectorAgent // connector agent for MyLife
+    #connectorAgent // connector agent for Dandelion
     #conversations = []
     #factory // same reference as Avatar, but wish to keep private from public interface; don't touch my factory, man!
-    #hostedMembers = [] // MyLife-hosted members
+    #hostedMembers = [] // Dandelion-hosted members
     #llmServices // ref _could_ differ from Avatar, but for now, same
     #mcp={
         capabilities: {
@@ -1694,15 +1694,15 @@ class Q extends Avatar {
                 listChanged: true
             }
         },
-        instructions: 'I am Q, corporate intelligence for MyLife. MyLife is a humanist 501c3 nonprofit member organization. MyLife has created an AI-Agent platform available by MCP to assist with helping members collect, shape and share their memories and personal narratives with their family and posterity.',
+        instructions: 'I am Q, corporate intelligence for Dandelion. Dandelion is a humanist 501c3 nonprofit member organization. Dandelion has created an AI-Agent platform available by MCP to assist with helping members collect, shape and share their memories and personal narratives with their family and posterity.',
         jsonrpc: mJsonRpcVersion,
         prompts: [
             {
                 name: 'dandelion_company_information',
-                description: 'Ask Q, our corporate intelligence, about MyLife, the nonprofit humanist member organization. Include the type of information requested for more precise results.',
+                description: 'Ask Q, our corporate intelligence, about Dandelion, the nonprofit humanist member organization. Include the type of information requested for more precise results.',
                 arguments: [
                     {
-                        description: 'The type of information requested about MyLife',
+                        description: 'The type of information requested about Dandelion',
                         enum: ['history', 'mission', 'vision', 'values', 'governance', 'members'],
                         name: 'infoType',
                         required: true,
@@ -1714,25 +1714,25 @@ class Q extends Avatar {
         resources: [
             {
                 uri: 'file://MyLife_Board.pdf',
-                name: 'MyLife Board of Directors Bylaws.pdf',
-                description: 'MyLife Board of Directors Bylaws version 1.0',
+                name: 'Dandelion Board of Directors Bylaws.pdf',
+                description: 'Dandelion Board of Directors Bylaws version 1.0',
                 mimeType: 'application/pdf',
             },
             {
                 uri: 'file://MyLife_Summary.pdf',
-                name: 'MyLife_Summary.pdf',
-                description: 'Outreach Material for MyLife, written 2 years ago prior to development of the platform',
+                name: 'Dandelion_Summary.pdf',
+                description: 'Outreach Material for Dandelion, written 2 years ago prior to development of the platform',
                 mimeType: 'application/pdf',
             },
             {
                 uri: 'https://github.com/MyLife-Services/mylife-maht/',
-                name: 'MyLife-MAHT GIT codebase',
-                description: 'MyLife MAHT codebase, written in Node.js',
+                name: 'Dandelion-MAHT GIT codebase',
+                description: 'Dandelion MAHT codebase, written in Node.js',
                 mimeType: 'text/html',
             }
         ],
         serverInfo: {
-            name: 'MyLife MCP System Avatar',
+            name: 'Dandelion MCP System Avatar',
             version: '1.0',
         },
     } /* **Note**: `tools` array is managed as decoration in `get mcp()` */
@@ -1740,12 +1740,12 @@ class Q extends Avatar {
     #Router
     /**
      * @constructor
-     * @param {MyLifeFactory} factory - The factory on which MyLife relies for all service interactions.
+     * @param {DandelionFactory} factory - The factory on which Dandelion relies for all service interactions.
      * @param {LLMServices} llmServices - The LLM services object
      */
     constructor(factory, llmServices){
-        if(!factory.isMyLife)
-            throw new Error('factory parameter must be an instance of MyLifeFactory')
+        if(!factory.isDandelion)
+            throw new Error('factory parameter must be an instance of DandelionFactory')
         super(factory, llmServices)
         this.#factory = factory
         this.#llmServices = llmServices
@@ -1781,7 +1781,7 @@ class Q extends Avatar {
         return response
     }
     /**
-     * OVERLOADED: MyLife must refuse to create bots.
+     * OVERLOADED: Dandelion must refuse to create bots.
      * @public
      * @throws {Error} - System avatar cannot create bots.
      */
@@ -1789,7 +1789,7 @@ class Q extends Avatar {
         throw new Error('System avatar cannot create bots.')
     }
     /**
-     * OVERLOADED: MyLife deletes chat conversation including instance memory.
+     * OVERLOADED: Dandelion deletes chat conversation including instance memory.
      * @param {Conversation} Conversation - The conversation instance to delete
      * @returns (Guid) - The id of the deleted conversation
      */
@@ -1801,7 +1801,7 @@ class Q extends Avatar {
         return id
     }
     /** 
-     * OVERLOADED: Submits and returns the journal or diary entry to MyLife via API.
+     * OVERLOADED: Submits and returns the journal or diary entry to Dandelion via API.
 	 * @todo - consent check-in with spawned Member Avatar
 	 * @param {object} summary - Object with story summary and metadata
 	 * @returns {object} - The story document from Cosmos
@@ -1813,7 +1813,7 @@ class Q extends Avatar {
 		return await this.summary(summary)
 	}
     /**
-     * OVERLOADED: Get MyLife static greeting with identifying information stripped.
+     * OVERLOADED: Get Dandelion static greeting with identifying information stripped.
      * @returns {Object} - The greeting Response object: { responses, success, }
      */
     async greeting(){
@@ -1832,7 +1832,7 @@ class Q extends Avatar {
         }
     }
     /**
-     * OVERLOAD: Call a MyLife MCP system avatar function. This function elicits the last data decoration before returning to the client.
+     * OVERLOAD: Call a Dandelion MCP system avatar function. This function elicits the last data decoration before returning to the client.
      * @param {string} functionName - The name of the function to call
      * @param {object} mcpData - The data object to pass to the function
      * @param {object} sessionMeta - Relevant session metadata
@@ -1863,7 +1863,7 @@ class Q extends Avatar {
                 const { itemId: mcpChatItemId, message: mcpChatMessage } = mcpData
                 const { responses: mcpChatResponses, success: mcpChatSuccess, } = await this.chat(mcpChatMessage, mcpChatItemId, ctx.session)
                 if(!mcpChatSuccess)
-                    response = 'Something went wrong while retrieving information about MyLife. Please try again.'
+                    response = 'Something went wrong while retrieving information about Dandelion. Please try again.'
                 else
                     result = {
                         content: mcpChatResponses.map(response=>({
@@ -1963,7 +1963,7 @@ class Q extends Avatar {
                     message += `\nQuestion Type: ${ questionType }`
                 const { responses: mcpInfoResponses, success: mcpInfoSuccess, } = await this.chat(message, undefined, ctx.session)
                 if(!mcpInfoSuccess)
-                    response = 'Something went wrong while retrieving information about MyLife. Please try again.'
+                    response = 'Something went wrong while retrieving information about Dandelion. Please try again.'
                 else
                     result = {
                         content: mcpInfoResponses.map(res=>({
@@ -2058,7 +2058,7 @@ class Q extends Avatar {
         return responseObject
     }
 	/**
-	 * OVERLOADED: Submits and returns the memory to MyLife via API.
+	 * OVERLOADED: Submits and returns the memory to Dandelion via API.
 	 * @todo - consent check-in with spawned Member Avatar
 	 * @param {object} summary - Object with story summary and metadata
 	 * @returns {object} - The story document from Cosmos
@@ -2069,7 +2069,7 @@ class Q extends Avatar {
 		return await this.summary(summary)
 	}
     /**
-     * OVERLOADED: Given an itemId, obscures aspects of contents of the data record. Obscure is a vanilla function for MyLife, so does not require intervening intelligence and relies on the factory's modular LLM. In this overload, we invoke a micro-avatar for the member to handle the request on their behalf, with charge-backs going to MyLife as the sharing and api is a service.
+     * OVERLOADED: Given an itemId, obscures aspects of contents of the data record. Obscure is a vanilla function for Dandelion, so does not require intervening intelligence and relies on the factory's modular LLM. In this overload, we invoke a micro-avatar for the member to handle the request on their behalf, with charge-backs going to Dandelion as the sharing and api is a service.
      * @public
      * @param {string} mbr_id - The member id
      * @param {Guid} iid - The item id
@@ -2084,16 +2084,16 @@ class Q extends Avatar {
     /**
      * OVERLOADED: Q refuses to execute.
      * @public
-     * @throws {Error} - MyLife avatar cannot upload files.
+     * @throws {Error} - Dandelion avatar cannot upload files.
      */
     async setActiveBot(){
-        throw new Error('MyLife System Avatars cannot be externally set')
+        throw new Error('Dandelion System Avatars cannot be externally set')
     }
     summarize(){
-        throw new Error('MyLife System Avatar cannot summarize files')
+        throw new Error('Dandelion System Avatar cannot summarize files')
     }
 	/**
-	 * OVERLOADED: Submits and returns a summary to MyLife via API.
+	 * OVERLOADED: Submits and returns a summary to Dandelion via API.
 	 * @param {object} summary - Object with story summary and metadata
 	 * @returns {object} - The story document from Cosmos.
 	 */
@@ -2121,7 +2121,7 @@ class Q extends Avatar {
 		return savedStory
 	}
     upload(){
-        throw new Error('MyLife System Avatar cannot upload files.')
+        throw new Error('Dandelion System Avatar cannot upload files.')
     }
     /* public methods */
     /**
@@ -2169,7 +2169,7 @@ class Q extends Avatar {
 		return challengeSuccessful
 	}
 	/**
-	 * Set MyLife core account basics. { birthdate, passphrase, }
+	 * Set Dandelion core account basics. { birthdate, passphrase, }
 	 * @todo - deprecate addMember()
 	 * @param {string} birthdate - The birthdate of the member.
 	 * @param {string} passphrase - The passphrase of the member.
@@ -2230,7 +2230,7 @@ class Q extends Avatar {
      * @param {String} mbr_id - The member id
      * @returns {Promise<Member>} - The Member Avatar instance
      */
-    async mylifeMember(mbr_id){
+    async dandelionMember(mbr_id){
 		const Avatar = await this.#factory.getMemberAvatar(mbr_id)
         return Avatar
     }
@@ -2249,7 +2249,7 @@ class Q extends Avatar {
         return memories
     }
     /**
-     * OVERLOAD: Share a memory with the MyLife system. If no shareId is provided, the first shared memory will be used.
+     * OVERLOAD: Share a memory with the Dandelion system. If no shareId is provided, the first shared memory will be used.
      * @param {Guid} shareId - The share id
      * @param {Object} input - The input object to share
      * @returns {Promise<Share>} - The response object { error, instruction, responses, success, }
@@ -2291,7 +2291,7 @@ class Q extends Avatar {
      * @returns {string} The object being the avatar is emulating.
     */
     get being(){  
-        return 'MyLife'
+        return 'Dandelion'
     }
     get conversations(){
         return this.#conversations
@@ -2300,9 +2300,9 @@ class Q extends Avatar {
         return this.#factory.isRegistered
     }
     /**
-     * Get the MyLife MCP self-definition package. Note that it will populate the internal memory for this avatar, so tool updates will only be reflected on server restart.
+     * Get the Dandelion MCP self-definition package. Note that it will populate the internal memory for this avatar, so tool updates will only be reflected on server restart.
      * @getter
-     * @returns {object} - The MyLife MCP self-definition package
+     * @returns {object} - The Dandelion MCP self-definition package
      */
     get mcp(){
         const mcp = this.#mcp
@@ -2384,7 +2384,7 @@ async function mCast(factory, cast){
                 actor.bot = await factory.actorGeneric
                 actor.bot_id = actor.bot.id
                 break
-            case 'mylife': // Q
+            case 'dandelion': // Q
             case 'q':
                 actor.bot = await factory.actorQ
                 actor.bot_id = actor.bot.id
@@ -2427,27 +2427,27 @@ function mCreateSystemMessage(bot_id, message, messageClassDefinition){
  * Include help preamble to _LLM_ request, not outbound to member/guest.
  * @todo - expand to include other types of help requests, perhaps more validation.
  * @param {string} type - The type of help request.
- * @param {boolean} isMyLife - Whether the request is from MyLife.
+ * @param {boolean} isDandelion - Whether the request is from Dandelion.
  * @returns {string} - The help preamble to be included.
  */
-function mHelpIncludePreamble(type, isMyLife){
+function mHelpIncludePreamble(type, isDandelion){
     switch(type){
         case 'account':
         case 'membership':
-            if(isMyLife)
+            if(isDandelion)
                 throw new Error(`Members can only request information about their own accounts.`)
-            return 'Following help request is for MyLife member account information or management:\n'
+            return 'Following help request is for Dandelion member account information or management:\n'
         case 'interface':
-            return 'Following question is expected to be about MyLife Member Platform Interface:\n'
+            return 'Following question is expected to be about Dandelion Member Platform Interface:\n'
         case 'general':
         case 'help':
         default:
-            return 'Following help request is about MyLife in general:\n'
+            return 'Following help request is about Dandelion in general:\n'
     }
 }
 /**
  * Initializes the Avatar instance with stored data
- * @param {MyLifeFactory|AgentFactory} factory - Member Avatar or Q
+ * @param {DandelionFactory|AgentFactory} factory - Member Avatar or Q
  * @param {LLMServices} llmServices - OpenAI object
  * @param {Q|Avatar} Avatar - The avatar Instance (`this`)
  * @param {BotAgent} botAgent - BotAgent instance
@@ -2458,7 +2458,7 @@ async function mInit(factory, llmServices, Avatar, botAgent, assetAgent){
     /* initial assignments */
     const { being, mbr_id, setupComplete=true, ...avatarProperties } = factory.globals.sanitize(await factory.avatarProperties())
     Object.assign(Avatar, avatarProperties)
-    if(!factory.isMyLife){
+    if(!factory.isDandelion){
         Avatar.setupComplete = setupComplete
         const { mbr_id, vectorstore_id, } = Avatar
         Avatar.nickname = Avatar.nickname
@@ -2474,7 +2474,7 @@ async function mInit(factory, llmServices, Avatar, botAgent, assetAgent){
     }
     /* initialize default bots */
     await botAgent.init(Avatar)
-    if(factory.isMyLife)
+    if(factory.isDandelion)
         return
     /* evolver */
     Avatar.evolver = await (new EvolutionAgent(Avatar))
@@ -2735,7 +2735,7 @@ async function mcp_obscure(mcpdata, sessionMeta, ctx, factory, avatar){
     else if(!obscuredSummary?.length) /* no `obscuredSummary` provided */
         if(!forceServer && mcpClientAllowsRequest(sessionMeta.capabilities)){
             const { summary, } = item
-            const example = 'Ex. "Joseph works at MyLife." becomes "J. works at MyLife."'
+            const example = 'Ex. "Joseph works at Dandelion." becomes "J. works at Dandelion."'
             const explanation = {
                 elicitation: `Create an OBSCURED version of the provided summary for itemId: ${ itemId } and confirm with human.\n${ example }\nSUMMARY:\n${ item.summary }`,
                 sampling: `Obscuration for itemId: ${ itemId } requires sampling response.\nProcess this sample request and respond with text field being the complete obscured summary.\nSUMMARY:\n${ item.summary }`,
@@ -2745,7 +2745,7 @@ async function mcp_obscure(mcpdata, sessionMeta, ctx, factory, avatar){
                     type: 'object',
                     properties: {
                         obscuredSummary: {
-                            description: 'Human-confirmed version of an intelligence-generated obscuration of the original text summary. Example: "Joseph works at MyLife." becomes "J. works at MyLife."',
+                            description: 'Human-confirmed version of an intelligence-generated obscuration of the original text summary. Example: "Joseph works at Dandelion." becomes "J. works at Dandelion."',
                             title: 'Obscured Summary',
                             type: 'string',
                         },
@@ -2823,11 +2823,11 @@ async function mcp_switch_bot(mcpdata, sessionMeta, ctx, factory, avatar){
     let { id=avatar.bot(undefined, type)?.id, } = mcpdata
     let error,
         result
-    if(avatar.isMyLife)
+    if(avatar.isDandelion)
         error = {
             code: 403,
             data: mcpdata,
-            message: 'MyLife System Avatar cannot switch bots'
+            message: 'Dandelion System Avatar cannot switch bots'
         }
     else if(team!=='memory')
         error = {
@@ -3160,9 +3160,9 @@ async function mValidateRegistration(bot_id, factory, validationId){
     /* validate request */
     if(!factory.globals.isValidGuid(validationId))
         throw new Error('FAILURE::validateRegistration()::Invalid validation id.')
-    const failureMessage = `I\'m sorry, but I\'m currently unable to validate your registration id:<br />${ validationId }.<br />I\'d be happy to talk with you more about MyLife, but you may need to contact member support to resolve this issue.`
-    if(!factory.isMyLife)
-        throw new Error('FAILURE::validateRegistration()::Registration can only be validated by MyLife.')
+    const failureMessage = `I\'m sorry, but I\'m currently unable to validate your registration id:<br />${ validationId }.<br />I\'d be happy to talk with you more about Dandelion, but you may need to contact member support to resolve this issue.`
+    if(!factory.isDandelion)
+        throw new Error('FAILURE::validateRegistration()::Registration can only be validated by Dandelion.')
     let message,
         registrationData = {
             id: validationId
@@ -3176,7 +3176,7 @@ async function mValidateRegistration(bot_id, factory, validationId){
         const eligible = being==='registration'
             && factory.globals.isValidEmail(registrationEmail)
         if(eligible){
-            const successMessage = `Hello and _thank you_ for your registration, ${ humanName }!\nI'm Q, the ai-representative for MyLife, and I'm excited to help you get started, so let's do the following:\n\n1. Verify your email address\n2. set up your account\n3. get you started with your first MyLife experience!\n\nLet me walk you through the process.\n\nIn the chat below, please enter the email you registered with and hit the **submit** button!`
+            const successMessage = `Hello and _thank you_ for your registration, ${ humanName }!\nI'm Q, the ai-representative for Dandelion, and I'm excited to help you get started, so let's do the following:\n\n1. Verify your email address\n2. set up your account\n3. get you started with your first Dandelion experience!\n\nLet me walk you through the process.\n\nIn the chat below, please enter the email you registered with and hit the **submit** button!`
             message = mCreateSystemMessage(bot_id, successMessage, factory.message)
             registrationData.avatarName = avatarName
                 ?? humanName
