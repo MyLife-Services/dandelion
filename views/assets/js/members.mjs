@@ -459,7 +459,7 @@ async function startExperience(experienceId){
     await experienceStart(experienceId)
 }
 /**
- * Submits a message to MyLife Member Services chat.
+ * Submits a message to Dandelion Member Services chat.
  * @async
  * @requires chatActiveItem
  * @param {string} message - The message to submit
@@ -633,8 +633,8 @@ async function mAddMessage(message, role='agent', typeDelay=2){
         switch(role){
             case 'system':
                 messageThumb.src = getBotIcon('system')
-                messageThumb.alt = `Q, MyLife's Corporate Intelligence`
-                messageThumb.title = `Hi, I'm Q, MyLife's Corporate Synthetic Intelligence. I am designed to help you better understand MyLife's organization, membership, services and vision.`
+                messageThumb.alt = `Q, Dandelion's Corporate Intelligence`
+                messageThumb.title = `Hi, I'm Q, Dandelion's Corporate Synthetic Intelligence. I am designed to help you better understand Dandelion's organization, membership, services and vision.`
                 break
             default:
                 const bot = activeBot()
@@ -660,7 +660,7 @@ async function mAddMessage(message, role='agent', typeDelay=2){
     chatCopy.title = 'Copy content to clipboard'
     const chatSave = document.createElement('i')
     chatSave.classList.add('fas', 'fa-floppy-disk', 'chat-save')
-    chatSave.title = 'Save memory directly to MyLife'
+    chatSave.title = 'Save memory directly to Dandelion'
     const chatFeedbackPositive = document.createElement('i')
     chatFeedbackPositive.classList.add('fas', 'fa-thumbs-up', 'chat-feedback')
     chatFeedbackPositive.title = 'I like this!'

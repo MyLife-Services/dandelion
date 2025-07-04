@@ -1,10 +1,10 @@
 /* css chat variables */
 :root {
-    --chat-base-z-index: calc(var(--mylife-base-z-index) + 10);
+    --chat-base-z-index: calc(var(--dandelion-base-z-index) + 10);
 	--chat-refresh-z-index: calc(var(--chat-base-z-index) + 5);
 	--chat-tab-z-index: calc(var(--chat-base-z-index) - 1);
 }
-/* MyLife chat container */
+/* Dandelion chat container */
 /* Chat Container */
 .chat-container-old {
     display: flex;
@@ -18,7 +18,7 @@
 /* Chat Container */
 .chat-container {
 	background: #ffffffad;
-	border-radius: var(--mylife-border-radius);
+	border-radius: var(--dandelion-border-radius);
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 	display: flex;
 	flex: 1 1 320px;
@@ -73,7 +73,7 @@ button.chat-submit:disabled {
 }
 .chat-message {
 	align-items: flex-start;
-	border-radius: var(--mylife-border-radius);
+	border-radius: var(--dandelion-border-radius);
 	display: flex;
 	gap: 0.5rem;
 	justify-content: flex-start;
@@ -154,7 +154,7 @@ img.chat-message-thumb-small {
 }
 .chat-section { 
     flex: 1 1 40vh;
-    border-radius: var(--mylife-border-radius);
+    border-radius: var(--dandelion-border-radius);
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
