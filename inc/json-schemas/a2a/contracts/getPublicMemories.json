@@ -1,6 +1,6 @@
 {
   "name": "getPublicMemories",
-  "description": "Returns a list of public memories { id, title, } available to experience (using A2A `getPublicMemory()`) in the MyLife system.",
+  "description": "Returns a list of public memories { id, title, } available to experience (using A2A `getPublicMemory()`) in the Dandelion system.",
   "examples": {
     "input": {},
     "output": {
@@ -24,7 +24,7 @@
         "type": "string"
       },
       "memories": {
-        "description": "An array of memories from the MyLife system intelligence.",
+        "description": "An array of memories from the Dandelion system intelligence.",
         "type": "array",
         "items": {
           "type": "object",

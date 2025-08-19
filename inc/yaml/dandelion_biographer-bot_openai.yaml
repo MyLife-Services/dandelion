@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
-  title: MyLife Biographer Bot API
+  title: Dandelion Biographer Bot API
   description: >
-    This API is for receiving webhooks from [MyLife's public Biographer Bot
+    This API is for receiving webhooks from [Dandelion's public Biographer Bot
     instance](https://chat.openai.com/g/g-QGzfgKj6I-mylife-biographer-bot).
     ## Updates
     - updated functions after failure to connect
@@ -10,23 +10,23 @@ info:
   version: 1.0.2
 servers:
   - url: https://mylife.ngrok.app/api/v1
-    description: Local development endpoint using ngrok for testing the MyLife Biographer Bot GPT.
+    description: Local development endpoint using ngrok for testing the Dandelion Biographer Bot GPT.
   - url: https://humanremembranceproject.org/api/v1
-    description: Endpoint for receiving stories from the MyLife Biographer Bot instance.
+    description: Endpoint for receiving stories from the Dandelion Biographer Bot instance.
 security:
   - bearerAuth: []
 paths:
   /keyValidation/{mid}:
     post:
       x-openai-isConsequential: false
-      operationId: MyLifeKeyValidation
-      summary: MyLife Biographer Bot will access this endpoint to validate a `memberKey` in MyLife.
-      description: Endpoint for handling incoming registration webhook data from the MyLife GPT service.
+      operationId: DandelionKeyValidation
+      summary: Dandelion Biographer Bot will access this endpoint to validate a `memberKey` in Dandelion.
+      description: Endpoint for handling incoming registration webhook data from the Dandelion GPT service.
       parameters:
         - name: mid
           in: path
           required: true
-          description: The `memberKey` data to be sent by MyLife Biographer Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that MyLife knows partition.
+          description: The `memberKey` data to be sent by Dandelion Biographer Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that Dandelion knows partition.
           example: memberHandle|ae3a090d-1089-4110-8575-eecd119f9d8e
           schema:
             maxLength: 256
@@ -71,14 +71,14 @@ paths:
   /memory/{mid}:
     post:
       x-openai-isConsequential: false
-      operationId: MyLifeSaveMemory
-      summary: MyLife Biographer Bot will access this endpoint to generate a `bio-story` document in MyLife Cosmos.
-      description: Endpoint for handling incoming registration webhook data from the MyLife GPT service.
+      operationId: DandelionSaveMemory
+      summary: Dandelion Biographer Bot will access this endpoint to generate a `bio-story` document in Dandelion Cosmos.
+      description: Endpoint for handling incoming registration webhook data from the Dandelion GPT service.
       parameters:
         - name: mid
           in: path
           required: true
-          description: The `memberKey` data to be sent by MyLife Biographer Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that MyLife knows partition. Is **not** just a guid/uuid.
+          description: The `memberKey` data to be sent by Dandelion Biographer Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that Dandelion knows partition. Is **not** just a guid/uuid.
           example: memberHandle|ae3a090d-1089-4110-8575-eecd119f9d8e
           schema:
             maxLength: 256
@@ -89,7 +89,7 @@ paths:
         content:
           application/json:
             schema:
-              description: The `memory` data sent by MyLife Biographer Bot.
+              description: The `memory` data sent by Dandelion Biographer Bot.
               type: object
               required:
                 - keywords
@@ -97,7 +97,7 @@ paths:
                 - title
               properties:
                 keywords:
-                  description: MyLife Biographer Bot interprets (or asks) keywords for this `memory`. Should not include relations or names, but would tag content dynamically. Each should be a single word or short phrase.
+                  description: Dandelion Biographer Bot interprets (or asks) keywords for this `memory`. Should not include relations or names, but would tag content dynamically. Each should be a single word or short phrase.
                   items:
                     description: A single word or short phrase to tag `memory` content.
                     maxLength: 64
@@ -112,7 +112,7 @@ paths:
                   minLength: 40
                   type: string
                 phaseOfLife:
-                  description: MyLife Biographer Bot interprets (or asks) phase of life for this `memory`.
+                  description: Dandelion Biographer Bot interprets (or asks) phase of life for this `memory`.
                   enum:
                     - birth
                     - childhood
@@ -127,18 +127,18 @@ paths:
                     - other
                   type: string
                 relationships:
-                  description: MyLife Biographer Bot does its best to record individuals (or pets) mentioned in this `memory`.
+                  description: Dandelion Biographer Bot does its best to record individuals (or pets) mentioned in this `memory`.
                   items:
                     description: A name of relational individual/pet to the `memory` content.
                     type: string
                   maxItems: 24
                   type: array
                 summary:
-                  description: MyLife Biographer Bot summary of identified `memory`.
+                  description: Dandelion Biographer Bot summary of identified `memory`.
                   maxLength: 20480
                   type: string
                 title:
-                  description: MyLife Biographer Bot determines title for this `memory`.
+                  description: Dandelion Biographer Bot determines title for this `memory`.
                   maxLength: 256
                   type: string
       responses:

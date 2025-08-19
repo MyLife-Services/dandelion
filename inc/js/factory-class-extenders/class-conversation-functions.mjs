@@ -1,6 +1,6 @@
 /* modular public functions */
 /**
- * Consumes a conversation object and uses supplied factory to (create/)save it to MyLife CosmosDB. Each session conversation is saved as a separate document, and a given thread may span many conversations, so cross-checking by thread_id will be required when rounding up and consolidating summaries for older coversations.
+ * Consumes a conversation object and uses supplied factory to (create/)save it to Dandelion CosmosDB. Each session conversation is saved as a separate document, and a given thread may span many conversations, so cross-checking by thread_id will be required when rounding up and consolidating summaries for older coversations.
  * @param {AgentFactory} factory - Factory instance
  * @param {Conversation} Conversation - Conversation instance
  * @returns {Promise<void>}

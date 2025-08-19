@@ -1,11 +1,11 @@
-class MylifeSystemError {
+class DandelionSystemError {
 //	public functions
 	constructor(err){
 		this.error = {}
 	}
 	handleError(){
-		//	mylife error wrapper
+		//	dandelion error wrapper
 	}
 }
 //	exports
-export default MylifeSystemError
+export default DandelionSystemError

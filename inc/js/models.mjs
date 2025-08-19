@@ -36,8 +36,8 @@ class Item extends EventEmitter {
     constructor(item, avatar, llmServices){
         if(!avatar || !llmServices)
             throw new Error('Avatar and LLM services required')
-        if(avatar.isMyLife)
-            throw new Error('MyLife cannot create stories')
+        if(avatar.isDandelion)
+            throw new Error('Dandelion cannot create stories')
         if(!item?.summary?.length)
             throw new Error('Item requires a summary')
         super()

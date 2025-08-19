@@ -6,7 +6,7 @@ import { mcpLogin, } from './mcp-functions.mjs'
 /* constants */
 const mA2AProviders = [
     {
-        description: 'The NANDA metaprotocol supports A2A providers for MyLife',
+        description: 'The NANDA metaprotocol supports A2A providers for Dandelion',
         id: 'nanda',
         name: 'NANDA',
         priority: 1,
@@ -16,19 +16,19 @@ const mA2AProviders = [
             endpoint: 'https://nanda-agent.org/a2a/',
             auth: {
                 scheme: 'bearer',
-                token: process.env.MYLIFE_NANDA_SHARED_TOKEN ?? null,
+                token: process.env.DANDELION_NANDA_SHARED_TOKEN ?? null,
                 scope: 'interests.read'
             }
         }
     },
     {
-        id: 'mylife',
-        name: 'MyLife',
+        id: 'dandelion',
+        name: 'Dandelion',
         priority: 2,
         proxies: ['q', 'internal'],
         transport: {
             type: 'internal',
-            endpoint: 'https://mylife.services/a2a/'
+            endpoint: 'https://dandelion.services/a2a/'
         }
     }
 ]
@@ -49,9 +49,9 @@ const mAgentCards = {},
         'contracts'
     ),
     mHandlers = { /* A2A handlers, represent piping between avatars and performed services/capabilities */
-        getMyLifeInfo: async (ctx, params)=>{
+        getDandelionInfo: async (ctx, params)=>{
             const { avatar: Avatar, } = ctx.state
-            if(!Avatar?.isMyLife)
+            if(!Avatar?.isDandelion)
                 return sendError(ctx, 403, -32601, 'Incorrect Avatar is being requested from avatar is in use. Please contact technical support.', { type: 'forbidden' })
             let question = ''
             if(params?.questionType)
@@ -76,15 +76,15 @@ const mAgentCards = {},
                 parts.push({
                     kind: 'text',
                     metadata: error,
-                    text: 'Failed to get MyLife info: ' + (error?.message || 'Unknown error'),
+                    text: 'Failed to get Dandelion info: ' + (error?.message || 'Unknown error'),
                 })
             return parts
         },
         getPublicMemory: 'get_shared_memory',
         getPublicMemories: "get_shared_memories",
-        mylifeLogin: async (ctx, params)=>{
+        dandelionLogin: async (ctx, params)=>{
             const { avatar: Avatar, } = ctx.state
-            if(!Avatar?.isMyLife)
+            if(!Avatar?.isDandelion)
                 return sendError(ctx, 403, -32601, 'Incorrect Avatar is being requested from avatar is in use. Please contact technical support.', { type: 'forbidden' })
             const { memberId: mbr_id, passphrase, } = params
             if(!mbr_id?.length || !passphrase?.length)
@@ -104,8 +104,8 @@ const mAgentCards = {},
                 ?? []
             return parts
         },
-        mylifeLogout: "logout",
-        registerForMyLifeMembership: "register",
+        dandelionLogout: "logout",
+        registerForDandelionMembership: "register",
     }
 /* load agent cards */
 try {
@@ -143,7 +143,7 @@ async function a2aCall(ctx){
         return sendError(ctx, 400, -32602, 'Invalid request body: expected role to be "user"', { type: 'invalid_request' })
     const { parameters, skill, skillId, } = extractSkill(card, parts)
     if(!skillId?.length) // @todo - should there be more helpful defaults and hints from internal intelligence? A pointer to a primer on how to use the agent's a2a capabilities?
-        return sendError(ctx, 400, -32602, 'Invalid request body. Specifications: Agent Requests via A2A Message **MUST** contain a `DataPart` that specifies the skill (id) being requested and any associated parameters; example: `{ "id": "getMyLifeInfo", "parameters": { "question": "who\'s on board?", "questionType": "board" } }`.', { type: 'invalid_request' })
+        return sendError(ctx, 400, -32602, 'Invalid request body. Specifications: Agent Requests via A2A Message **MUST** contain a `DataPart` that specifies the skill (id) being requested and any associated parameters; example: `{ "id": "getDandelionInfo", "parameters": { "question": "who\'s on board?", "questionType": "board" } }`.', { type: 'invalid_request' })
     try {
         historyLogItem(ctx, messageId, {
             skill: { parameters, skill, skillId, },
@@ -220,7 +220,7 @@ async function a2aCard(ctx){
         card.endpoints.adaptive_resolver.url = makeUrlAbsolute(card.endpoints.adaptive_resolver.url)
     if(card?.url && !card.url.startsWith('http'))
         card.url = makeUrlAbsolute(card.url)
-    card.provider.url = process.env.MYLIFE_ORIGIN
+    card.provider.url = process.env.DANDELION_ORIGIN
         ?? 'https://humanremembranceproject.org'
     ctx.body = card
 }
@@ -278,7 +278,7 @@ async function a2aHandler(ctx, agentId, skillId, params){
     if(!handler)
         return sendError(ctx, 501, -32601, `Handler not implemented for capability: ${skillId}`, { type: 'not_implemented' })
     const { avatar: Avatar, } = ctx.state
-    if(!Avatar?.isMyLife)
+    if(!Avatar?.isDandelion)
         return sendError(ctx, 403, -32601, 'Incorrect Avatar is being requested from avatar is in use. Please contact technical support.', { type: 'forbidden' })
     const { sessionMeta={}, } = ctx.session
     try {   
@@ -529,7 +529,7 @@ function historyLogItem(ctx, messageId, data){
  */
 function makeUrlAbsolute(url){
     if(url?.length && !url.startsWith('http')){
-        const origin = process.env.MYLIFE_ORIGIN
+        const origin = process.env.DANDELION_ORIGIN
             ?? 'https://humanremembranceproject.org'
         if(!origin.endsWith('/') && !url.startsWith('/'))
             url = origin + '/' + url

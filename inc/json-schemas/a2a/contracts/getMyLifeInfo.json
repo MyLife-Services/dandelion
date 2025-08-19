@@ -1,6 +1,6 @@
 {
-  "name": "getMyLifeInfo",
-  "description": "Returns current information about the MyLife system intelligence, available agents, and services.",
+  "name": "getDandelionInfo",
+  "description": "Returns current information about the Dandelion system intelligence, available agents, and services.",
   "examples": {
     "input": {
       "question": "What agents are available?",
@@ -11,7 +11,7 @@
     "type": "object",
     "properties": {
       "question": {
-        "description": "A question to ask the MyLife system intelligence, if applicable.",
+        "description": "A question to ask the Dandelion system intelligence, if applicable.",
         "type": "string"
       },
       "questionCategory": {
@@ -24,20 +24,20 @@
   },
   "metadata": {
     "aliases": {
-      "getMyLifeAgents": {
-        "proxyFor": "getMyLifeInfo",
+      "getDandelionAgents": {
+        "proxyFor": "getDandelionInfo",
         "defaultInput": { "questionCategory": "agents" }
       },
       "getMembershipInfo": {
-        "proxyFor": "getMyLifeInfo",
+        "proxyFor": "getDandelionInfo",
         "defaultInput": { "questionCategory": "membership" }
       },
       "getRegistrationInfo": {
-        "proxyFor": "getMyLifeInfo",
+        "proxyFor": "getDandelionInfo",
         "defaultInput": { "questionCategory": "registration" }
       },
       "getHelpInfo": {
-        "proxyFor": "getMyLifeInfo",
+        "proxyFor": "getDandelionInfo",
         "defaultInput": { "questionCategory": "interface" }
       }
     }

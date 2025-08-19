@@ -1,25 +1,25 @@
 openapi: 3.0.0
 info:
-  title: MyLife Library Bot API
-  description: This API is for receiving webhooks from [MyLife Library Bot instance]().
+  title: Dandelion Library Bot API
+  description: This API is for receiving webhooks from [Dandelion Library Bot instance]().
   version: 1.0.0
 servers:
   - url: https://8d55-73-149-210-124.ngrok-free.app/api/v1
-    description: Endpoint for receiving stories from the MyLife Library Bot instance.
+    description: Endpoint for receiving stories from the Dandelion Library Bot instance.
 security:
   - bearerAuth: []
 paths:
   /keyValidation/{mid}:
     post:
       x-openai-isConsequential: false
-      operationId: MyLifeKeyValidation
-      summary: MyLife Library Bot will access this endpoint to validate a `memberKey` in MyLife Cosmos.
-      description: Endpoint for handling incoming registration webhook data from the MyLife GPT service.
+      operationId: DandelionKeyValidation
+      summary: Dandelion Library Bot will access this endpoint to validate a `memberKey` in Dandelion Cosmos.
+      description: Endpoint for handling incoming registration webhook data from the Dandelion GPT service.
       parameters:
         - name: mid
           in: path
           required: true
-          description: The `memberKey` data to be sent by MyLife Library Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that MyLife knows partition.
+          description: The `memberKey` data to be sent by Dandelion Library Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that Dandelion knows partition.
           schema:
             maxLength: 256
             minLength: 40
@@ -55,14 +55,14 @@ paths:
   /library/{mid}:
     post:
       x-openai-isConsequential: false
-      operationId: MyLifeLibraryAddition
-      summary: MyLife Library Bot will access this endpoint to generate a `Library` document in MyLife Cosmos.
-      description: Endpoint for handling incoming webhook data from the MyLife GPT service.
+      operationId: DandelionLibraryAddition
+      summary: Dandelion Library Bot will access this endpoint to generate a `Library` document in Dandelion Cosmos.
+      description: Endpoint for handling incoming webhook data from the Dandelion GPT service.
       parameters:
         - name: mid
           in: path
           required: true
-          description: The `memberKey` data to be sent by MyLife Library Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that MyLife knows partition.
+          description: The `memberKey` data to be sent by Dandelion Library Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that Dandelion knows partition.
           schema:
             maxLength: 256
             minLength: 40
@@ -72,7 +72,7 @@ paths:
         content:
           application/json:
             schema:
-              description: The `Library` data sent by MyLife Library Bot.
+              description: The `Library` data sent by Dandelion Library Bot.
               type: object
               required:
                 - library

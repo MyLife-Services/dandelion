@@ -1,6 +1,6 @@
 /* module constants */
 const mAudioNotRecording = `<div>Click or Tap on <b>Microphone</b> to start recording</div>`
-const mAudioRecording = `<div><b>MyLife is listening!</b><br />To <span style="color: indianred;"><b>STOP</b></span>, click the <b>Microphone</b> again, or <em><u>after a pause</u></em> say <em>DONE</em> or <em>SEND</em> to send directly to <b>Q</b></div>`
+const mAudioRecording = `<div><b>Dandelion is listening!</b><br />To <span style="color: indianred;"><b>STOP</b></span>, click the <b>Microphone</b> again, or <em><u>after a pause</u></em> say <em>DONE</em> or <em>SEND</em> to send directly to <b>Q</b></div>`
 const mDefaultHelpPlaceholderText = 'Help me, Q-bi Wan, Help me!'
 const mHelpInitiatorContent = {
     experiences: `I'll do my best to assist with an "experiences" request. Please type in your question or issue below and click "Send" to get started.`,
@@ -227,7 +227,7 @@ class Datamanager {
         return response
     }
     /**
-     * MyLife function to obscure an item summary
+     * Dandelion function to obscure an item summary
      * @param {Guid} itemId - The item ID
      * @returns {Object} - The item object: { id, summary, etc. }
      */
@@ -446,7 +446,7 @@ class Datamanager {
         return response
     }
     /**
-     * MyLife function to obscure an item summary
+     * Dandelion function to obscure an item summary
      * @param {Guid} itemId - The item ID
      * @returns {Object} - The item object: { id, summary, etc. }
      */
@@ -693,7 +693,7 @@ class Globals {
         if(!mLoaded){
             /* constants */
             mAvatarName = this.getAvatar()?.name
-                ?? 'MyLife'
+                ?? 'Dandelion'
             mPlaceholder = `Type your message to ${ mAvatarName }...`
             /* elements */
             mChatAudioIcon = document.getElementById('audio-icon')
@@ -999,13 +999,13 @@ class Globals {
      * @returns {object} - The avatar object.
      */
     getAvatar(){
-        const avatar = window?.mylifeAvatar
-            ?? window?.mylifeAvatarData
+        const avatar = window?.dandelionAvatar
+            ?? window?.dandelionAvatarData
             ?? window?.avatar
         return avatar
     }
     /**
-     * Returns the handle of a given MyLife member composite string.
+     * Returns the handle of a given Dandelion member composite string.
      * @param {string} str - String to get handle of.
      * @returns {string} - The handle of the string.
      */
@@ -1015,7 +1015,7 @@ class Globals {
         return this.variableIze(str).split('|')[0]
     }
     /**
-     * Returns the id of a given MyLife member composite string. **Note**: must return a guid
+     * Returns the id of a given Dandelion member composite string. **Note**: must return a guid
      * @param {string} str - String to get id of.
      * @returns {string|Guid} - The id of the string.
      */
@@ -1278,7 +1278,7 @@ function mCreateAwait(message){
 function mSpeechInitialization(inputCheckCallback){
     /* speech recognition */
     if(!('webkitSpeechRecognition' in window)){
-        alert('MyLife requires a browser that supports Speech Recognition. Please use Google Chrome or Microsoft Edge.')
+        alert('Dandelion requires a browser that supports Speech Recognition. Please use Google Chrome or Microsoft Edge.')
         mChatAudioIcon.style.display = 'none'
         return
     }
@@ -1293,7 +1293,7 @@ function mSpeechInitialization(inputCheckCallback){
     /* speech grammar */
     try{
         const grammar =
-        '#JSGF V1.0; grammar core; public <core> = MyLife | Q | humanism | humanist ;'
+        '#JSGF V1.0; grammar core; public <core> = Dandelion | Q | humanism | humanist ;'
           const speechRecognitionList = new webkitSpeechGrammarList()
           speechRecognitionList.addFromString(grammar, 1)
           mRecognition.grammar = speechRecognitionList
@@ -1358,7 +1358,7 @@ function mSpeechInitialization(inputCheckCallback){
     /* speech synthesis */
     if(!('speechSynthesis' in window)){
         mChatAudioIcon.style.display = 'none'
-        alert('MyLife requires a browser that supports Speech Synthesis. Please use Google Chrome or Microsoft Edge.')
+        alert('Dandelion requires a browser that supports Speech Synthesis. Please use Google Chrome or Microsoft Edge.')
         return
     }
     mSynthesis = window.speechSynthesis

@@ -1,12 +1,12 @@
 {
 	"annotations": {
-		"title": "MyLife-Get-Summary",
+		"title": "Dandelion-Get-Summary",
 		"readOnlyHint": false,
 		"destructiveHint": true,
 		"idempotentHint": true,
 		"openWorldHint": false
 	},
-    "description": "I get an item's summary from the MyLife database by a given itemId",
+    "description": "I get an item's summary from the Dandelion database by a given itemId",
     "inputSchema": {
         "type": "object",
         "properties": {
@@ -17,7 +17,7 @@
         },
         "required": ["itemId"]
     },
-    "mylife_bots": [
+    "dandelion_bots": [
         "avatar",
         "biographer",
         "diary",

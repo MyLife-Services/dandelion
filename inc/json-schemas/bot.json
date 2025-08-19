@@ -22,7 +22,7 @@
         },
 		"being": {
 			"const": "bot",
-			"description": "root constructor for bot in MyLife",
+			"description": "root constructor for bot in Dandelion",
 			"type": "string"
 		},
         "bot_id": {
@@ -55,7 +55,7 @@
         "provider": {
             "description": "provider of bot",
             "default": "openai",
-            "enum": ["azure", "meta", "mylife", "openai", "other"],
+            "enum": ["azure", "meta", "dandelion", "openai", "other"],
             "type": "string",
             "$comment": "@todo: breakout into $def for provider, ergo we can include in ecosystem as partner, etc."
         },

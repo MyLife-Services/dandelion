@@ -11,7 +11,7 @@
                 "type": "string"
             },
             "form": {
-                "description": "MyLife System Form of `item`",
+                "description": "Dandelion System Form of `item`",
                 "enum": [
                     "biographer",
                     "diary",
@@ -66,7 +66,7 @@
                 "type": "string"
             },
             "type": {
-                "description": "MyLife System Being type of `item`",
+                "description": "Dandelion System Being type of `item`",
                 "enum": [
                     "entry",
                     "memory"

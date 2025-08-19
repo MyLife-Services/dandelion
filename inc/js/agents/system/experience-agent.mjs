@@ -1,5 +1,5 @@
 import BotAgent from "./bot-agent.mjs"
-import { Share, } from '../../mylife-models.mjs'
+import { Share, } from '../../models.mjs'
 import { Marked } from 'marked'
 /* module constants */
 const mAvailableEventActionMap = {
@@ -77,7 +77,7 @@ class CastMember extends Actor {
 }
 /**
  * @class Experience
- * An `experience` is the unit of demonstration of a particular pre-built script by MyLife (or Member) _or_ the execution of illustration of a memory, idea, or other database `item` that can be rendered experientially. The Experience Agent can manage multiple `experiences` of this ilk.
+ * An `experience` is the unit of demonstration of a particular pre-built script by Dandelion (or Member) _or_ the execution of illustration of a memory, idea, or other database `item` that can be rendered experientially. The Experience Agent can manage multiple `experiences` of this ilk.
  * @todo - add `scriptAdvisor` to Experience, which would be a separate conversation for the scriptAdvisor bot to determine success conditions for scene, etc.
  */
 class Experience {
@@ -378,7 +378,7 @@ class ExperienceEvent {
 /* ShareAgent class */
 /**
  * @class ShareAgent
- * Handles the `sharing` process for Mylife currently only via System Avatar.
+ * Handles the `sharing` process for Dandelion currently only via System Avatar.
  */
 class ShareAgent {
     /* private properties */
@@ -418,7 +418,7 @@ class ShareAgent {
         return share
     }
     /**
-     * Deletes a share from MyLife `shares` container and associated object (get itemId from `share` itself).
+     * Deletes a share from Dandelion `shares` container and associated object (get itemId from `share` itself).
      * @param {Guid} sid - The Share id
      * @returns {Promise<Boolean>} - Success or failure of the operation
      */
@@ -439,7 +439,7 @@ class ShareAgent {
         return response
     }
     /**
-     * Gets all owned relevant shares from MyLife `shares` container, either by item or member.
+     * Gets all owned relevant shares from Dandelion `shares` container, either by item or member.
      * @param {Guid} itemId - The item id (optional)
      * @returns {Promise<object[]>} - The MemberShare array
      */
@@ -613,7 +613,7 @@ function mCast(cast, botAgent, Factory){
             case 'system':
                 Bot = Factory.actor
                 break
-            case 'mylife': // Q
+            case 'dandelion': // Q
             case 'q':
                 Bot = Factory.actorQ
                 break
@@ -1016,7 +1016,7 @@ async function mExperienceRun(memberInput, Experience){
             /* end-of-experience */
             const { developers, goal, name: experienceName, } = Experience
             const name = experienceName
-                ?? 'MyLife Experience'
+                ?? 'Dandelion Experience'
             const { title=name, } = Experience
             sequenceEnd = {
                 action: 'end',

@@ -4,7 +4,7 @@
 	"required": [],
 	"type": "object",
 	"name": "OpenAISchema",
-    "description": "Unofficial catalog of openai API objects for manipulating as objects inside of MyLife platform. Root object is empty, it's objective is to offer the catalog under the $defs property.",
+    "description": "Unofficial catalog of openai API objects for manipulating as objects inside of Dandelion platform. Root object is empty, it's objective is to offer the catalog under the $defs property.",
     "$comment": "see file metadata or github for last updated date",
 	"properties": {
 		"openai_gpt_assistant": {

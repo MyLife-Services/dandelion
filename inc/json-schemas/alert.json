@@ -29,12 +29,12 @@
             "items": {
                 "type": "string",
                 "enum": ["charter", "general", "members", "personal", "technologists"],
-                "description": "Audience type, specific to MyLife requirements.",
+                "description": "Audience type, specific to Dandelion requirements.",
                 "$comment": "explorer, technologist, leader, navigator, all human roles or role playing that we enjoy, i.e., TWERE an audience developed like so: [xxx, yyy] which would Member be?"
             }
         },        
         "being": {
-            "description": "The nature of the alert, specific to MyLife requirements.",
+            "description": "The nature of the alert, specific to Dandelion requirements.",
             "type": "string",
             "const": "alert"
         },

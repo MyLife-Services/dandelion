@@ -1,27 +1,27 @@
 openapi: 3.1.0
 info:
-  title: MyLife Diary Bot API
-  description: This API is for receiving webhooks from [MyLife's public Diary Bot instance](https://chatgpt.com/g/g-rSCnLVUKd-mylife-diary-bot-prototype). All diary submissions are referred to as `entry` within this API. 20240927 update @mookse added `obscure` pathway
+  title: Dandelion Diary Bot API
+  description: This API is for receiving webhooks from [Dandelion's public Diary Bot instance](https://chatgpt.com/g/g-rSCnLVUKd-mylife-diary-bot-prototype). All diary submissions are referred to as `entry` within this API. 20240927 update @mookse added `obscure` pathway
   version: 1.0.1
 servers:
   - url: https://mylife.ngrok.app/api/v1
-    description: Local development endpoint using ngrok for testing the MyLife Diary Bot GPT.
+    description: Local development endpoint using ngrok for testing the Dandelion Diary Bot GPT.
   - url: https://humanremembranceproject.org/api/v1
-    description: Production endpoint for receiving entries from the MyLife Diary Bot instance.
+    description: Production endpoint for receiving entries from the Dandelion Diary Bot instance.
 security:
   - bearerAuth: []
 paths:
   /keyValidation/{mid}:
     post:
       x-openai-isConsequential: false
-      operationId: MyLifeKeyValidation
-      summary: MyLife Diary Bot will access this endpoint to validate a `memberKey` in MyLife.
-      description: Endpoint for handling incoming registration webhook data from the MyLife GPT service.
+      operationId: DandelionKeyValidation
+      summary: Dandelion Diary Bot will access this endpoint to validate a `memberKey` in Dandelion.
+      description: Endpoint for handling incoming registration webhook data from the Dandelion GPT service.
       parameters:
         - name: mid
           in: path
           required: true
-          description: The `memberKey` data to be sent by MyLife Diary Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that MyLife knows partition.
+          description: The `memberKey` data to be sent by Dandelion Diary Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that Dandelion knows partition.
           example: memberHandle|ae3a090d-1089-4110-8575-eecd119f9d8e
           schema:
             maxLength: 256
@@ -66,14 +66,14 @@ paths:
   /entry/{mid}:
     post:
       x-openai-isConsequential: false
-      operationId: MyLifeSaveEntry
-      summary: MyLife Diary Bot will access this endpoint to log an `entry` document in MyLife.
-      description: Endpoint for handling incoming entry data from the MyLife GPT service. Each entry represents a diary submission from the user, and the bot handles tagging and metadata generation.
+      operationId: DandelionSaveEntry
+      summary: Dandelion Diary Bot will access this endpoint to log an `entry` document in Dandelion.
+      description: Endpoint for handling incoming entry data from the Dandelion GPT service. Each entry represents a diary submission from the user, and the bot handles tagging and metadata generation.
       parameters:
         - name: mid
           in: path
           required: true
-          description: The `memberKey` data to be sent by MyLife Biographer Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that MyLife knows partition. Is **not** just a guid/uuid.
+          description: The `memberKey` data to be sent by Dandelion Biographer Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that Dandelion knows partition. Is **not** just a guid/uuid.
           example: memberHandle|ae3a090d-1089-4110-8575-eecd119f9d8e
           schema:
             maxLength: 256
@@ -84,7 +84,7 @@ paths:
         content:
           application/json:
             schema:
-              description: The entry data sent by MyLife Diary Bot.
+              description: The entry data sent by Dandelion Diary Bot.
               type: object
               required:
                 - content
@@ -103,7 +103,7 @@ paths:
                   description: Constant form of "diary"
                   type: string
                 keywords:
-                  description: MyLife Diary Bot interprets and infers keywords relevant to this `entry`. Should NOT include names of individuals (there is a property for this).
+                  description: Dandelion Diary Bot interprets and infers keywords relevant to this `entry`. Should NOT include names of individuals (there is a property for this).
                   items:
                     description: A single word or short phrase to tag `entry` content.
                     maxLength: 64
@@ -117,7 +117,7 @@ paths:
                   maxLength: 64
                   type: string
                 relationships:
-                  description: MyLife Diary Bot does its best to record individuals (or pets) mentioned in this `entry`.
+                  description: Dandelion Diary Bot does its best to record individuals (or pets) mentioned in this `entry`.
                   items:
                     description: A name of a relational individual/pet relevant to the `entry` content.
                     type: string
@@ -163,14 +163,14 @@ paths:
   /obscure/{mid}:
     post:
       x-openai-isConsequential: false
-      operationId: MyLifeObscureEntry
-      summary: MyLife Diary Bot will access this endpoint to have the MyLife system obscure an `entry` summary on behalf of member.
-      description: Endpoint for handling incoming request to obscure an entry summary from the MyLife GPT service.
+      operationId: DandelionObscureEntry
+      summary: Dandelion Diary Bot will access this endpoint to have the Dandelion system obscure an `entry` summary on behalf of member.
+      description: Endpoint for handling incoming request to obscure an entry summary from the Dandelion GPT service.
       parameters:
         - name: mid
           in: path
           required: true
-          description: The `memberKey` data to be sent by MyLife Biographer Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that MyLife knows partition. Is **not** just a guid/uuid.
+          description: The `memberKey` data to be sent by Dandelion Biographer Bot. Visitor enters memberKey and it is kept in GPT memory and sent with each request so that Dandelion knows partition. Is **not** just a guid/uuid.
           example: memberHandle|ae3a090d-1089-4110-8575-eecd119f9d8e
           schema:
             maxLength: 256

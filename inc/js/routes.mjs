@@ -242,7 +242,7 @@ _mcpMemberRouter.post('/mcp', mcpCall) // MCP 2025-03-26
 _mcpMemberRouter.post('/message', mcpCall)
 _mcpMemberRouter.post('/messages', mcpCall)
 /* Nanda routes */
-_nandaRouter.get('/mylife', server)
+_nandaRouter.get('/dandelion', server)
 _nandaRouter.get('/servers/:sid', server)
 _nandaRouter.get('/servers/:sid/ratings', serverRatings)
 _nandaRouter.get('/servers', servers)
@@ -278,7 +278,7 @@ async function memberValidation(ctx, next){
             ctx.status = 401
             ctx.body = {
                 alert: true,
-                message: 'Your MyLife Member Session has timed out and is no longer valid. Please log in again.',
+                message: 'Your Dandelion Member Session has timed out and is no longer valid. Please log in again.',
                 redirectUrl
             }
         } else

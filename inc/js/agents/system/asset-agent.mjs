@@ -3,13 +3,13 @@ import fs from 'fs'
 import mime from 'mime-types'
 //	module constants
 const {
-	MYLIFE_EMBEDDING_SERVER_BEARER_TOKEN: bearerToken,
-	MYLIFE_EMBEDDING_SERVER_FILESIZE_LIMIT,
-	MYLIFE_EMBEDDING_SERVER_FILESIZE_LIMIT_ADMIN,
-	MYLIFE_SERVER_MBR_ID: mylifeMbrId,
+	DANDELION_EMBEDDING_SERVER_BEARER_TOKEN: bearerToken,
+	DANDELION_EMBEDDING_SERVER_FILESIZE_LIMIT,
+	DANDELION_EMBEDDING_SERVER_FILESIZE_LIMIT_ADMIN,
+	DANDELION_SERVER_MBR_ID: dandelionMbrId,
 } = process.env
-const fileSizeLimit = parseInt(MYLIFE_EMBEDDING_SERVER_FILESIZE_LIMIT) || 1048576
-const fileSizeLimitAdmin = parseInt(MYLIFE_EMBEDDING_SERVER_FILESIZE_LIMIT_ADMIN) || 10485760
+const fileSizeLimit = parseInt(DANDELION_EMBEDDING_SERVER_FILESIZE_LIMIT) || 1048576
+const fileSizeLimitAdmin = parseInt(DANDELION_EMBEDDING_SERVER_FILESIZE_LIMIT_ADMIN) || 10485760
 class AssetAgent {
 	#globals
 	#llm
@@ -135,7 +135,7 @@ class AssetAgent {
 			'text/plain',
 		]
 		const { size, mimetype } = file
-		const maxFileSize = this.mbr_id === mylifeMbrId
+		const maxFileSize = this.mbr_id === dandelionMbrId
 			?	fileSizeLimitAdmin
 			:	fileSizeLimit
 		if((size ?? 0) > maxFileSize)

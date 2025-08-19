@@ -1,6 +1,6 @@
-# MyLife System Assistants
+# Dandelion System Assistants
 
-The MyLife system incorporates a suite of specialized assistants, each designed to augment various aspects of the avatars within the platform. These assistants follow consistent coding protocols and are currently intended exclusively for integration with avatars, enhancing their functionality and interactivity.
+The Dandelion system incorporates a suite of specialized assistants, each designed to augment various aspects of the avatars within the platform. These assistants follow consistent coding protocols and are currently intended exclusively for integration with avatars, enhancing their functionality and interactivity.
 
 - **Asset-Agent**: (File Handler) This agent manages file-related operations, ensuring efficient handling, storage, and retrieval of files within the system. It acts as a central hub for file management tasks, streamlining the process of dealing with various file formats and data types.
 
@@ -18,13 +18,13 @@ The MyLife system incorporates a suite of specialized assistants, each designed 
 
 - **Connector-Assistant (External Service Manager)**: Acting as a bridge to the outside world, the Connector Assistant manages interactions with external services and platforms. Whether it's cloud services, music, information databases, or external avatar services, this assistant facilitates seamless integration and interaction with a variety of external resources and services.
 
-Each of these assistants contributes to a more dynamic, efficient, and personalized avatar experience within the MyLife system. By specializing in different domains, they collectively enhance the overall functionality and adaptability of the avatars, making them more capable and versatile in serving the users' diverse needs.
+Each of these assistants contributes to a more dynamic, efficient, and personalized avatar experience within the Dandelion system. By specializing in different domains, they collectively enhance the overall functionality and adaptability of the avatars, making them more capable and versatile in serving the users' diverse needs.
 
 ## Evolution Assistant (Evo-Agent)
 
 ### Overview
 
-The Evolution Assistant, referred to as Evo-Agent, is a core component in the MyLife asset-assistant project. It is implemented in the `evolution-assistant.mjs` file and serves as an integral part of the system, managing the evolutionary process of avatars within the MyLife platform.
+The Evolution Assistant, referred to as Evo-Agent, is a core component in the Dandelion asset-assistant project. It is implemented in the `evolution-assistant.mjs` file and serves as an integral part of the system, managing the evolutionary process of avatars within the Dandelion platform.
 
 ### Design and Functionality
 

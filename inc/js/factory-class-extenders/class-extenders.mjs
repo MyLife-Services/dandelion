@@ -49,7 +49,7 @@ function extendClass_conversation(originClass, referencesObject){
          * Constructor for Conversation class.
          * @param {Object} obj - Data object for construction
          * @param {AgentFactory} factory - The factory instance
-         * @param {Guid} bot_id - The initial active bot MyLife `id`
+         * @param {Guid} bot_id - The initial active bot Dandelion `id`
          * @param {String} llm_id - The initial active LLM `id`
          * @param {Object} thread - The related thread instance
          * @returns {Conversation} - The constructed conversation instance
@@ -170,7 +170,7 @@ function extendClass_conversation(originClass, referencesObject){
             }
         }
         /**
-         * Saves the conversation to the MyLife Database.
+         * Saves the conversation to the Dandelion Database.
          * @async
          * @returns {void}
          */
