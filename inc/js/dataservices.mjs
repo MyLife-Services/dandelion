@@ -47,8 +47,10 @@ class Dataservices {
      * Constructor for Dataservices class.
      * @param {string} _mbr_id - Member ID to partition data.
      */
-	constructor(_mbr_id){
-		this.#partitionId = _mbr_id
+	constructor(mbr_id){
+		if(!mbr_id?.length)
+			throw new Error('Missing member ID: cannot construct Dataservices')
+		this.#partitionId = mbr_id
 	}
     /**
      * Initializes the Datamanager instance and sets up core data.
