@@ -126,7 +126,7 @@ Before you begin, ensure you have the following installed on your machine:
 
    This command reads the `package.json` file and installs all the required Node.js packages listed in it.
 
-3. **Environment Setup**: The application requires an environment setup. Create a `.env` file in the root of your project and add the necessary environment variables. Refer to the provided `.env.example` file for required keys. Dandelion plans to offer self-retrieval keys for any data transfers, but for the time being, if you wish to run a hosted solution for friends, family or other community congregation, you will have to be vetted internally by connecting with our technical leads @stratfordCircle Steve Kenney or @Mookse Erik Jespersen also reachable at <erikj@humanremembranceproject.org>.
+3. **Environment Setup**: The application requires an environment setup. Create a `.env` file in the root of your project and add the necessary environment variables. Refer to the provided `.env.example` file for required keys. Dandelion plans to offer self-retrieval keys for any data transfers, but for the time being, if you wish to run a hosted solution for friends, family or other community congregation, you will have to be vetted internally by connecting with our technical leads @stratfordCircle Steve Kenney or @Mookse Erik Jespersen also reachable at <mylife.president@gmail.com>.
 
 4. **Run the application**: After installing the dependencies and setting up the environment, you can start the application.
 
@@ -234,6 +234,7 @@ SOFTWARE.
 ### Contact
 
 You may contact either Erik Jespersen @Mookse or Steve Kenney @stratfordCircle at github with any technical questions.
+
 Additionally, you could visit the main [Dandelion website](https://humanremembranceproject.org) at <erikj@humanremembranceproject.org>.
 
 ### Appendix Notes
