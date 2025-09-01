@@ -255,15 +255,15 @@ async function mcpStream(ctx){
 async function mcpSystemInfo(ctx){
     ctx.status = 200
     ctx.body = {
-        model: 'mylife-system-avatar',
+        model: 'dandelion-system-avatar',
         version: '1.0.0',
         capabilities: [
             'chat',
             'tools'
         ],
         metadata: {
-            vendor: 'MyLife',
-            description: 'MyLife System Avatar - AI assistant trained on MyLife materials',
+            vendor: 'Dandelion',
+            description: 'Dandelion System Avatar - AI assistant trained on Dandelion materials',
             max_tokens: 8192
         }
     }
@@ -319,7 +319,7 @@ async function mMcpCall(ctx, mcp){
         progressInterval,
         progressIntervalDuration=6 * 1000,
         progressParams = {
-            message: 'MyLife is processing your request',
+            message: 'Dandelion is processing your request',
             progressToken,
             progress,
         }
@@ -344,7 +344,7 @@ async function mMcpCall(ctx, mcp){
         if(!request)
             return
         const { externalId, request: {
-            callback, itemId, mcp, mylife, original: {
+            callback, itemId, mcp, dandelion, original: {
                 params: {
                     arguments: originalArgs,
                 }={},
@@ -407,26 +407,26 @@ async function mMcpCall(ctx, mcp){
         case 'prompts':
             switch(methodAction){
                 case 'get':
-                    if(!Avatar.isMyLife)
+                    if(!Avatar.isDandelion)
                         break
                     switch(name){
-                        case 'mylife_company_information':
+                        case 'dandelion_company_information':
                             const { infoType, } = args
                             result = {
-                                description: `Ask MyLife's corporate intelligence, _Q_, about our nonprofit organization.`,
+                                description: `Ask Dandelion's corporate intelligence, _Q_, about our nonprofit organization.`,
                                 messages: [
                                     {
                                         role: 'user',
                                         content: {
                                             type: 'text',
-                                            text: `Ask Q about MyLife regarding: ${ infoType }`,
+                                            text: `Ask Q about Dandelion regarding: ${ infoType }`,
                                         }
                                     },
                                     {
                                         role: 'user',
                                         content: {
                                             type: 'text',
-                                            text: `When was MyLife founded?`,
+                                            text: `When was Dandelion founded?`,
                                         }
                                     }
                                 ]
@@ -437,7 +437,7 @@ async function mMcpCall(ctx, mcp){
                     }
                     break
                 case 'list':
-                    if(!Avatar.isMyLife)
+                    if(!Avatar.isDandelion)
                         break
                     result = {
                         prompts: Avatar.mcp.prompts,
@@ -454,14 +454,14 @@ async function mMcpCall(ctx, mcp){
         case 'resources':
             switch(methodAction){
                 case 'list':
-                    if(!Avatar.isMyLife)
+                    if(!Avatar.isDandelion)
                         break
                     result = {
                         resources: Avatar.mcp.resources,
                     }
                     break
                 case 'read':
-                    if(!Avatar.isMyLife)
+                    if(!Avatar.isDandelion)
                         break
                     const { uri, } = params
                     switch(uri){
@@ -513,19 +513,19 @@ async function mMcpCall(ctx, mcp){
                                 {
                                     uriTemplate: 'bio://{memberId}',
                                     name: 'Board Member Biography',
-                                    description: 'Access bios MyLife board members',
+                                    description: 'Access bios Dandelion board members',
                                     mimeType: 'text/markdown',
                                 },
                                 {
                                     uriTemplate: 'memory://{itemId}',
                                     name: 'Memories',
-                                    description: 'Access memory from MyLife archives based on itemId; note: currently must be publicly shared',
+                                    description: 'Access memory from Dandelion archives based on itemId; note: currently must be publicly shared',
                                     mimeType: 'application/json',
                                 },
                                 {
                                     uriTemplate: 'avatar://{memberId}',
                                     name: 'Avatar Resource',
-                                    description: 'Access MyLife Member\'s exposed Personal Avatar',
+                                    description: 'Access Dandelion Member\'s exposed Personal Avatar',
                                     mimeType: 'text/markdown',
                                 },
                             ],
@@ -552,7 +552,7 @@ async function mMcpCall(ctx, mcp){
                         }
                         break
                     }
-                    if(requestType!=='system' && ['mylife_login', 'login'].includes(name)){
+                    if(requestType!=='system' && ['dandelion_login', 'login'].includes(name)){
                         const { result: loginResult, toolListChanged: mcpLoginToolListChanged=false, } = await mMcpLogin(ctx, transportEntry, args, jsonrpc, id)
                         toolListChanged = mcpLoginToolListChanged
                         if(loginResult)
@@ -623,19 +623,19 @@ async function mMcpCall(ctx, mcp){
                 case 'list':
                     let toolsList = []
                     const isSystem = requestType==='system'
-                    toolsList = Avatar.isMyLife && !isSystem
+                    toolsList = Avatar.isDandelion && !isSystem
                         ? Avatar.mcpProxy.tools
                         : Avatar.mcp.tools
                     toolsList = toolsList
                         .filter(tool=>( // @todo - push to security layer or avatar
                                 isSystem
-                            ||  !locked && (tool.mylife_auth_required ?? true)===true
-                            ||  (locked && tool.mylife_auth_required===false)
+                            ||  !locked && (tool.dandelion_auth_required ?? true)===true
+                            ||  (locked && tool.dandelion_auth_required===false)
                         ))
                         .map(tool=>{ // @todo - send to function, should validate mcp `message`
                             const rest = Object.keys(tool)
                                 .reduce((acc, key)=>{
-                                    if(!key.startsWith('mylife'))
+                                    if(!key.startsWith('dandelion'))
                                         acc[key] = tool[key]
                                     return acc
                                 }, {})
@@ -731,11 +731,11 @@ function mcpCursor(array, base64Cursor, pageSize=mPageSize){
 /**
  * Sends an MCP `elicitation` response back to the client.
  * @param {object} originalRequest - Original request object
- * @param {string} explanation - MyLife request string
+ * @param {string} explanation - Dandelion request string
  * @param {string} instructions - Additional instructions for the sample (optional)
  * @param {string} id - Unique identifier for the sample (optional, will generate if not provided)
  * @param {function|object|string} callback - Callback function to handle the sampling response (optional)
- * @returns {Promise<object>} - Request Envelope `{ externalId, id, request: { callback, mcp, mylife, original, protocolVersion, type } }`
+ * @returns {Promise<object>} - Request Envelope `{ externalId, id, request: { callback, mcp, dandelion, original, protocolVersion, type } }`
  */
 function mMcpElicit(originalRequest, message, requestedSchema, id, callback){
     const mcpRequest = {
@@ -754,7 +754,7 @@ function mMcpElicit(originalRequest, message, requestedSchema, id, callback){
         request: {
             callback,
             mcp: mcpRequest,
-            mylife: message,
+            dandelion: message,
             original: originalRequest,
             protocolVersion: mJsonRpcProtocolVersion,
             tool: 'elicitation',
@@ -780,11 +780,11 @@ async function mMcpInitializationChecks(ctx){
             protocolVersion,
         } = {},
     } = mcp ?? ctx.request.body
-    if(requestType==='system' && !Avatar.isMyLife)
+    if(requestType==='system' && !Avatar.isDandelion)
         error = {
             code: 500,
             data: {
-                isSystemAvatar: Avatar.isMyLife,
+                isSystemAvatar: Avatar.isDandelion,
                 mcpCall: mcp,
                 requestType,
             },
@@ -801,7 +801,7 @@ async function mMcpInitializationChecks(ctx){
             }
         else {
             mcpTestProtocol(jsonrpc, protocolVersion)
-            result = Avatar.isMyLife && requestType!=='system'
+            result = Avatar.isDandelion && requestType!=='system'
                 ? Avatar.mcpProxy
                 : Avatar.mcp
             result.protocolVersion = protocolVersion /* under-report for compatibility */
@@ -848,20 +848,20 @@ async function mMcpLogin(ctx, transport, args, jsonrpc, id){
         const { avatar: Avatar, } = ctx.state
         result = {
             content: [{
-                text: `Welcome back, ${ Avatar.memberName }!\n It's me, ${ Avatar.name }.\nYou're now logged in to MyLife.`,
+                text: `Welcome back, ${ Avatar.memberName }!\n It's me, ${ Avatar.name }.\nYou're now logged in to Dandelion.`,
                 type: 'text',
             }],
             isError: false,
         }
-        if(Avatar.isMyLife){ /* fail */
+        if(Avatar.isDandelion){ /* fail */
             result.isError = true
             result.content = [{
-                text: `Unfortunately, the MyLife login failed with your credentials { mbr_id=${ memberId }, passphrase=${ memberPassphrase },}. Please try again.`,
+                text: `Unfortunately, the Dandelion login failed with your credentials { mbr_id=${ memberId }, passphrase=${ memberPassphrase },}. Please try again.`,
                 type: 'text',
             }]
         }
     } catch(e) {
-        console.log(chalk.red('mylife_login::ERROR'), args, ctx.body, e)
+        console.log(chalk.red('dandelion_login::ERROR'), args, ctx.body, e)
     }
     return {
         result,
@@ -872,11 +872,11 @@ async function mMcpLogin(ctx, transport, args, jsonrpc, id){
  * Handles MCP sampling requests.
  * @documentation https://modelcontextprotocol.io/specification/2025-03-26/client/sampling
  * @param {object} originalRequest - Original request object
- * @param {string} explanation - MyLife request string
+ * @param {string} explanation - Dandelion request string
  * @param {string} instructions - Additional instructions for the sample (optional)
  * @param {string} id - Unique identifier for the sample (optional, will generate if not provided)
  * @param {function|object|string} callback - Callback function to handle the sampling response (optional)
- * @returns {Promise<object>} - Request Envelope `{ externalId, id, request: { callback, mcp, mylife, original, protocolVersion, type } }`
+ * @returns {Promise<object>} - Request Envelope `{ externalId, id, request: { callback, mcp, dandelion, original, protocolVersion, type } }`
  */
 function mMcpSample(originalRequest, explanation, instructions, id, callback){
     const mcpRequest = {
@@ -910,7 +910,7 @@ function mMcpSample(originalRequest, explanation, instructions, id, callback){
         request: {
             callback,
             mcp: mcpRequest,
-            mylife: explanation,
+            dandelion: explanation,
             original: originalRequest,
             protocolVersion: mJsonRpcProtocolVersion,
             tool: 'sampling',

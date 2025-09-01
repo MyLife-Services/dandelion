@@ -1,18 +1,18 @@
 {
 	"annotations": {
-		"title": "MyLife-Logout",
+		"title": "Dandelion-Logout",
 		"readOnlyHint": true,
 		"destructiveHint": false,
 		"idempotentHint": false,
 		"openWorldHint": false
 	},
-	"description": "I am the MyLife Member Logout tool. If logged in, I can log you out of your MyLife account.",
+	"description": "I am the Dandelion Member Logout tool. If logged in, I can log you out of your Dandelion account.",
 	"inputSchema": {
 		"type": "object",
 		"properties": {},
 		"required": []
 	},
-	"mylife_bots": [
+	"dandelion_bots": [
         "any"
     ],
     "name": "logout"

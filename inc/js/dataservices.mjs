@@ -1,13 +1,13 @@
 /**
- * @fileOverview This file contains the Dataservices class, which manages data interactions for the MyLife platform.
+ * @fileOverview This file contains the Dataservices class, which manages data interactions for the Dandelion platform.
  * It includes functionality for handling avatars, chats, items, and other core elements of the platform's data.
  * @version 1.0.0
  */
 //	imports
-import Datamanager from "./mylife-datamanager.mjs"
+import Datamanager from "./datamanager.mjs"
 /**
  * The Dataservices class.
- * This class provides methods to interact with the data layers of the MyLife platform, predominantly the Azure Cosmos and PostgreSQL database.
+ * This class provides methods to interact with the data layers of the Dandelion platform, predominantly the Azure Cosmos and PostgreSQL database.
  * Any new Dataservices class is instantiated with a member id, which is used to identify the member in the database, and retrieve the core data for that member.
  */
 class Dataservices {
@@ -47,8 +47,10 @@ class Dataservices {
      * Constructor for Dataservices class.
      * @param {string} _mbr_id - Member ID to partition data.
      */
-	constructor(_mbr_id){
-		this.#partitionId = _mbr_id
+	constructor(mbr_id){
+		if(!mbr_id?.length)
+			throw new Error('Missing member ID: cannot construct Dataservices')
+		this.#partitionId = mbr_id
 	}
     /**
      * Initializes the Datamanager instance and sets up core data.
@@ -87,8 +89,8 @@ class Dataservices {
 	get id(){
 		return this.partitionId.split('|')[1]
 	}
-	get isMyLife(){
-		return this.mbr_id===process.env.MYLIFE_SERVER_MBR_ID ?? false
+	get isDandelion(){
+		return this.mbr_id===process.env.DANDELION_SERVER_MBR_ID ?? false
 	}
 	get mbr_id(){
 		return this.partitionId
@@ -98,17 +100,17 @@ class Dataservices {
 	}
 	//	public functions
 	/**
-	 * Upon MyLife account creation, generates `core` and saves to database.
+	 * Upon Dandelion account creation, generates `core` and saves to database.
 	 * @param {object} core - Data object containing member's initial core data from which avatar object will be derived.
 	 * @returns (object) - The saved avatar data object.
 	 */
 	async addAvatar(core){
-		if(!this.isMyLife)
-			throw new Error('MyLife avatar required for addAvatar()', this.mbr_id)
+		if(!this.isDandelion)
+			throw new Error('Dandelion avatar required for addAvatar()', this.mbr_id)
 		return await this.pushItem(mAvatarProperties(core, this.globals))
 	}
 	/**
-	 * Upon MyLife account creation, generates `core` and saves to database.
+	 * Upon Dandelion account creation, generates `core` and saves to database.
 	 * @param {object} core - Data object containing member's initial core data.
 	 * @returns (object) - The core object.
 	 */
@@ -146,7 +148,7 @@ class Dataservices {
 		return missions
 	}
 	/**
-	 * Retrieves all public experiences (i.e., owned by MyLife).
+	 * Retrieves all public experiences (i.e., owned by Dandelion).
 	 * @public
 	 * @async
 	 * @returns {Object[]} - An array of the currently available public experiences.
@@ -622,8 +624,8 @@ class Dataservices {
      * @returns {boolean} - true if passphrase reset successful.
      */
     async resetPassphrase(passphrase){
-        if(this.isMyLife)
-            throw new Error('MyLife avatar cannot reset passphrase.')
+        if(this.isDandelion)
+            throw new Error('Dandelion avatar cannot reset passphrase.')
         if(!passphrase?.length)
             throw new Error('Passphrase required for reset.')
         try{
@@ -655,7 +657,7 @@ class Dataservices {
 	 * @returns {boolean} - `true` if partition key is active, `false` otherwise.
 	 */
 	async testPartitionKey(mbr_id){
-		if(!this.isMyLife)
+		if(!this.isDandelion)
 			return false
 		return await this.datamanager.testPartitionKey(mbr_id)
 	}
@@ -685,7 +687,7 @@ class Dataservices {
 			throw new Error(`Registration not found: ${ candidateId }`)
 		const { avatarName, id, } = candidate
 		if(id?.length){
-			candidate.mbr_id = this.globals.createMbr_id(avatarName, id) // overwrites MyLife mbr_id
+			candidate.mbr_id = this.globals.createMbr_id(avatarName, id) // overwrites Dandelion mbr_id
 			const exists = await this.testPartitionKey(candidate.mbr_id)
 			if(exists)
 				throw new Error('Registrant already a member!')

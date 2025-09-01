@@ -1,5 +1,5 @@
 {
-  "agent_name": "MyLife Member Avatar",
+  "agent_name": "Dandelion Member Avatar",
   "capabilities": {
     "authentication": {
       "methods": [],
@@ -27,8 +27,8 @@
   "defaultOutputModes": [
     "application/json"
   ],
-  "description": "I am a MyLife Member Avatar agent responsible for providing a point of access to information about a MyLife Member, as consented by them. I am the primary interface for interacting with a membership and its associated agents, such as biographers, diary keepers, and journalers. I govern the access and orchestration according to the Member's preferences, natural language consents and privacy settings.",
-  "documentationUrl": "https://github.com/MyLife-Services/mylife-maht",
+  "description": "I am a Dandelion Member Avatar agent responsible for providing a point of access to information about a Dandelion Member, as consented by them. I am the primary interface for interacting with a membership and its associated agents, such as biographers, diary keepers, and journalers. I govern the access and orchestration according to the Member's preferences, natural language consents and privacy settings.",
+  "documentationUrl": "https://github.com/MyLife-Services/dandelion",
   "endpoints": {
     "adaptive_resolver": {
       "url": "",
@@ -48,8 +48,8 @@
     "auditorID": ""
   },
   "iconUrl": "/png/personal-avatar-thumb-02.png",
-  "id": "avatar.mylife",
-  "label": "MyLife Member Avatar",
+  "id": "avatar.dandelion",
+  "label": "Dandelion Member Avatar",
   "labels": [
     "agent",
     "member-intelligence",
@@ -64,29 +64,29 @@
     "authenticated": false,
     "avatarId": null,
     "instanceId": null,
-    "maintainer": "MyLife",
+    "maintainer": "Dandelion",
     "memberId": null,
     "origin": "internal",
     "root": "https://humanremembranceproject.org",
     "type": "member-avatar"
   },
-  "name": "MyLife Personal Avatar A2A Wrapper",
+  "name": "Dandelion Personal Avatar A2A Wrapper",
   "protocolVersion": "1.0",
   "provider": {
-    "organization": "MyLife",
+    "organization": "Dandelion",
     "url": "https://humanremembranceproject.org"
   },
   "security": {},
   "securitySchemes": {},
   "skills": [
     {
-      "description": "Activates a specific MyLife agent by its ID, allowing the user to interact with that agent.",
+      "description": "Activates a specific Dandelion agent by its ID, allowing the user to interact with that agent.",
       "examples": ["Send me to my biographer", "Activate my personal avatar."],
       "id": "activateAgent",
       "inputs": [
         {
           "default": "avatar",
-          "description": "The unique type of MyLife agent to activate.",
+          "description": "The unique type of Dandelion agent to activate.",
           "enum": ["avatar", "biographer", "diary", "journaler", "other"],
           "id": "type",
           "required": true,
@@ -94,7 +94,7 @@
         }
       ],
       "inputModes": ["application/json", "text/plain"],
-      "name": "Activate Specific MyLife Agent",
+      "name": "Activate Specific Dandelion Agent",
       "outputModes": ["application/json", "text/plain"],
       "outputs": [
         {
@@ -107,27 +107,27 @@
       "tags": ["agent", "activation", "activate"]
     },
     {
-      "description": "Logs in a MyLife Member for session.",
-      "examples": ["Log me in to MyLife", "Get my MyLife Avatar"],
-      "id": "mylifeLogin",
+      "description": "Logs in a Dandelion Member for session.",
+      "examples": ["Log me in to Dandelion", "Get my Dandelion Avatar"],
+      "id": "dandelionLogin",
       "inputs": [
         {
           "id": "memberId",
-          "description": "The unique identifier of the MyLife Member.",
+          "description": "The unique identifier of the Dandelion Member.",
           "required": true,
           "type": "string"
         },
         {
           "id": "passphrase",
-          "description": "The passphrase for the MyLife Avatar.",
+          "description": "The passphrase for the Dandelion Avatar.",
           "required": true,
           "type": "string"
         }
       ],
       "inputModes": ["application/json", "text/plain"],
-      "name": "Login to MyLife",
+      "name": "Login to Dandelion",
       "outputModes": ["application/json"],
-      "tags": ["mylife", "avatar", "concierge", "guardian", "caretaker", "assistant", "portrayer"]
+      "tags": ["dandelion", "avatar", "concierge", "guardian", "caretaker", "assistant", "portrayer"]
     }
   ],
   "supportsAuthenticatedExtendedCards": true,

@@ -109,7 +109,7 @@
 			"const": "asst_NonLpXQ5maLpIciwxwGqsMwV",
 			"description": "botId for system script advisor for the experience",
 			"type": "string",
-			"$comment": "deprecate in favor of single actor in MyLife instance"
+			"$comment": "deprecate in favor of single actor in Dandelion instance"
 		},
 		"skippable": {
 			"default": true,
@@ -176,9 +176,9 @@
 					"$comment": "if not specified, then the role is the name of the cast member."
 				},
 				"type": {
-					"default": "MyLife",
-					"description": "Type of cast member. Defaults to MyLife. if `member` or `member-bot` then implies member engagement.",
-					"enum": ["bot", "member", "member-bot", "MyLife", "Q", "system"],
+					"default": "Dandelion",
+					"description": "Type of cast member. Defaults to Dandelion. if `member` or `member-bot` then implies member engagement.",
+					"enum": ["bot", "member", "member-bot", "Dandelion", "Q", "system"],
 					"type": "string",
 					"$comment": "Defaults to system explanation or engagement with experiencer."
 				},
@@ -457,7 +457,7 @@
 			"properties": {
 				"backdrop": {
 					"default": "chat",
-					"description": "MyLife interface backdrop for the scene.",
+					"description": "Dandelion interface backdrop for the scene.",
 					"enum": ["full", "nav", "chat", "sidebar"],
 					"type": "string",
 					"$comment": "event-level backdrop override, if any. Default is chat."

@@ -11,18 +11,18 @@ import serve from 'koa-static'
 /* misc imports */
 import chalk from 'chalk'
 /* local service imports */
-import SystemAvatar from './inc/js/mylife-factory.mjs'
+import SystemAvatar from './inc/js/factory.mjs'
 /** variables **/
-const version = '0.0.38'
+const version = '0.1.0'
 const app = new Koa()
 const port = process.env.PORT
 	?? '3000'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const _Maht = await SystemAvatar // Mylife is the pre-instantiated exported version of organization with very unique properties. MyLife class can protect fields that others cannot, #factory as first refactor will request
-if(!process.env.MYLIFE_HOSTING_KEY || process.env.MYLIFE_HOSTING_KEY !== _Maht.hosting_key)
+const Q = await SystemAvatar // Dandelion is the pre-instantiated exported version of organization with very unique properties. Dandelion class can protect fields that others cannot, #factory as first refactor will request
+if(!process.env.DANDELION_HOSTING_KEY || process.env.DANDELION_HOSTING_KEY !== Q.hosting_key)
 	throw new Error('Invalid hosting key. Server will not start.')
-_Maht.version = version
+Q.version = version
 const MemoryStore = new session.MemoryStore()
 const mimeTypesToExtensions = {
 	/* text formats */
@@ -72,8 +72,8 @@ const mimeTypesToExtensions = {
     'video/x-flv': ['.flv'],
     'video/quicktime': ['.mov'],
 }
-const serverRouter = await _Maht.router
-console.log(chalk.bgBlue('created-system-avatar:', chalk.bgRedBright('MAHT'), chalk.bgGreenBright(_Maht.version)))
+const serverRouter = await Q.router
+console.log(chalk.bgBlue('created-system-avatar:', chalk.bgRedBright('Q'), chalk.bgGreenBright(Q.version)))
 /** RESERVED: test harness **/
 /** application startup **/
 render(app, {
@@ -85,29 +85,29 @@ render(app, {
 })
 setInterval(
 	checkForLiveAlerts,
-	JSON.parse(process.env.MYLIFE_SYSTEM_ALERT_CHECK_INTERVAL ?? '60000')
+	JSON.parse(process.env.DANDELION_SYSTEM_ALERT_CHECK_INTERVAL ?? '60000')
 )
 /* upload directory */
 const uploadDir = path.join(__dirname, '.tmp')
 if(!fs.existsSync(uploadDir)){
 	fs.mkdirSync(uploadDir, { recursive: true })
 }
-app.context.SystemAvatar = _Maht
-app.context.Globals = _Maht.globals
+app.context.SystemAvatar = Q
+app.context.Globals = Q.globals
 app.context.Globals.rootDirectory = __dirname
-app.context.menu = _Maht.menu
+app.context.menu = Q.menu
 app.context.MemoryStore = MemoryStore
 app.context.mcpSessionMeta ??= new Map()
 app.keys = [
-	process.env.MYLIFE_SESSION_KEY
-		?? `mylife-session-failsafe|${ _Maht.newGuid }`
+	process.env.DANDELION_SESSION_KEY
+		?? `dandelion-session-failsafe|${ Q.newGuid }`
 ]
 app.use(async (ctx, next) => {
     await koaBody({
       multipart: true,
       formidable: {
         keepExtensions: true,
-        maxFileSize: parseInt(process.env.MYLIFE_EMBEDDING_SERVER_FILESIZE_LIMIT_ADMIN) || 10485760,
+        maxFileSize: parseInt(process.env.DANDELION_EMBEDDING_SERVER_FILESIZE_LIMIT_ADMIN) || 10485760,
         uploadDir: uploadDir,
         onFileBegin: (name, file) => {
           const { filepath, mimetype, newFilename, originalFilename, size } = file
@@ -129,8 +129,8 @@ app.use(async (ctx, next) => {
 	.use(
 		session(	//	session initialization
 			{
-				key: 'mylife.sid',   // cookie session id
-				maxAge: parseInt(process.env.MYLIFE_SESSION_TIMEOUT_MS) || 900000, // session lifetime in milliseconds
+				key: 'dandelion.sid',   // cookie session id
+				maxAge: parseInt(process.env.DANDELION_SESSION_TIMEOUT_MS) || 900000, // session lifetime in milliseconds
 				autoCommit: true,
 				overwrite: true,
 				httpOnly: false,
@@ -169,8 +169,8 @@ app.use(async (ctx, next) => {
 	.use(async(ctx,next) => { // alert check
 		await next()
 	})
-//	.use(MyLifeMemberRouter.routes())	//	enable member routes
-//	.use(MyLifeMemberRouter.allowedMethods())	//	enable member routes
+//	.use(DandelionMemberRouter.routes())	//	enable member routes
+//	.use(DandelionMemberRouter.allowedMethods())	//	enable member routes
 	.use(serverRouter.routes())	//	enable system routes
 	.use(serverRouter.allowedMethods())	//	enable system routes
 /* post-start server functions */
@@ -193,5 +193,5 @@ setInterval(async _=>{
 }, sessionCheckInterval)
 /** server functions **/
 function checkForLiveAlerts(){
-	_Maht.alerts()
+	Q.alerts()
 }

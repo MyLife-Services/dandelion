@@ -37,9 +37,9 @@ class ConnectorAgent {
     async nandaServer(serverId){
         if(!this.globals.isValidGuid(serverId))
             switch(serverId){
-                case 'mylife':
+                case 'dandelion':
                 case undefined:
-                    return this.#nandaRegistry.mylifeServer
+                    return this.#nandaRegistry.dandelionServer
                 case 'popular':
                     return this.#nandaRegistry.popularServers(10)
                 case 'history':
@@ -182,8 +182,8 @@ class nandaRegistry {
             ? { 'Authorization': `Bearer ${ this.#registryToken }` }
             : {}
     }
-    get mylifeServer(){
-        const server = this.attachedServers.find(server=>server.name.toLowerCase()==='mylife')
+    get dandelionServer(){
+        const server = this.attachedServers.find(server=>server.name.toLowerCase()==='dandelion')
         return server
     }
     /* private functions */

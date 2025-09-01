@@ -1207,7 +1207,7 @@ function mCreateTeamPopup(type, clickX=0, clickY=0, showPopup=true){
             teamSelect.classList.add('team-select')
             const teamOption = document.createElement('option')
             teamOption.disabled = true
-            teamOption.textContent = `MyLife's pre-defined agent teams...`
+            teamOption.textContent = `Dandelion's pre-defined agent teams...`
             teamOption.selected = true
             teamOption.value = ''
             teamSelect.appendChild(teamOption)
@@ -2664,7 +2664,7 @@ function mUpdateLabels(activeLabelId, labels){
 }
 
 /**
- * Submit updated passphrase for MyLife via avatar.
+ * Submit updated passphrase for Dandelion via avatar.
  * @private
  * @async
  * @param {Event} event - The event object.

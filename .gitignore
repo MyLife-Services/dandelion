@@ -1,14 +1,21 @@
-# basic js installations
+############
+# basic node
+############
 node_modules/
-/in-progress/
 .env*
+##################
+# specific recalls
+##################
 .vscode/
 .personal/
-__*/ # ignore all folders starting with an underscore
+__*/
 .hintrc
 .uploads
 .tmp
 .DS_Store
 .code-workspace
-.postman
 postman
+############
+# Inclusions
+############
+!.env.example

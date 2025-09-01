@@ -1,7 +1,7 @@
 /* document vars */
 :root {
     --border-radius: 0.22rem;
-    --collection-item-popup-z-index: calc(var(--mylife-sidebar-z-index)+50);
+    --collection-item-popup-z-index: calc(var(--dandelion-sidebar-z-index)+50);
     --slider-height: 1rem;
     --slider-margin: 0.1rem;
     --slider-width: 2rem;

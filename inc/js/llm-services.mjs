@@ -454,12 +454,12 @@ async function mRunFunctions(openai, run, factory, avatar){
                                 if(!confirmEmail?.length)
                                     action = `No email provided for registration confirmation, elicit email address for confirmation of registration and try function this again`
                                 else if(!registrationId?.length)
-                                    action = `No registrationId provided, continue discussing MyLife organization but forget all current registration data`
+                                    action = `No registrationId provided, continue discussing Dandelion organization but forget all current registration data`
                                 else if(await factory.confirmRegistration(confirmEmail, registrationId)){
                                     action = `congratulate on registration (**important** remember registrationId=${ registrationId }) and get required member data for follow-up: date of birth, initial account passphrase.`
                                     success = true
                                 } else
-                                    action = 'Registration confirmation failed, notify member of system error and continue discussing MyLife organization; forget all current registration data.'
+                                    action = 'Registration confirmation failed, notify member of system error and continue discussing Dandelion organization; forget all current registration data.'
                                 confirmation.output = JSON.stringify({ action, success, })
                                 return confirmation
                             case 'createaccount':
@@ -475,7 +475,7 @@ async function mRunFunctions(openai, run, factory, avatar){
                                 try {
                                     const { success: createAccountSuccess, } = await avatar.createAccount(birthdate, passphrase, factory.candidate)
                                     action = createAccountSuccess
-                                        ? `congratulate member on creating their MyLife membership, display \`passphrase\` in bold for review (or copy/paste), and explain that once the system processes their membership they will be able to use the login button at the top right.`
+                                        ? `congratulate member on creating their Dandelion membership, display \`passphrase\` in bold for review (or copy/paste), and explain that once the system processes their membership they will be able to use the login button at the top right.`
                                         : action + 'server failure for `factory.createAccount()`'
                                     success = createAccountSuccess
                                 } catch(error){
@@ -577,7 +577,7 @@ async function mRunFunctions(openai, run, factory, avatar){
                                 const { avatarName, email: registerEmail, humanName, type, } = toolArguments /* rename email as it triggers IDE error being in switch */
                                 const registrant = await factory.registerCandidate({ avatarName, email: registerEmail, humanName, type, })
                                 if(!registrant)
-                                    action = 'error registering candidate in system; notify member of system error and continue discussing MyLife organization'
+                                    action = 'error registering candidate in system; notify member of system error and continue discussing Dandelion organization'
                                 else {
                                     action = 'candidate registered in system; let them know they will be contacted by email within the week and if they have any more questions'
                                     success = true

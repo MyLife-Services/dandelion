@@ -13,7 +13,7 @@
 		"being": {
 			"type": "string",
 			"const": "message",
-			"description": "root constructor for message in MyLife"
+			"description": "root constructor for message in Dandelion"
 		},
 		"id": {
 			"description": "uuid of message",
@@ -283,7 +283,7 @@
 				"response_time": {
 					"type": "integer",
 					"description": "UNIX date-time of front-end receipt to delivery of response",
-					"$comment": "tracks from point of delivery of request to point of delivery of response; can be used to track response time of member, assistant and potentially MyLife server services; could contribute to extrapolate other facets of human behavioral responses with digital interface devices"
+					"$comment": "tracks from point of delivery of request to point of delivery of response; can be used to track response time of member, assistant and potentially Dandelion server services; could contribute to extrapolate other facets of human behavioral responses with digital interface devices"
 				},
 				"type": {
 					"type": "string",

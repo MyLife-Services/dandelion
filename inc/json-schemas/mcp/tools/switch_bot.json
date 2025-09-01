@@ -1,12 +1,12 @@
 {
     "annotations": {
-        "title": "MyLife-Switch-Bot",
+        "title": "Dandelion-Switch-Bot",
         "readOnlyHint": false,
         "destructiveHint": true,
         "idempotentHint": true,
         "openWorldHint": false
     },
-	"description": "I can switch you to a different active MyLife bot intelligence, given the bot function.",
+	"description": "I can switch you to a different active Dandelion bot intelligence, given the bot function.",
 	"inputSchema": {
         "type": "object",
 		"properties": {
@@ -29,7 +29,7 @@
 		},
 		"required": ["type"]
 	},
-    "mylife_bots": [
+    "dandelion_bots": [
         "any"
     ],
     "name": "switch_bot",

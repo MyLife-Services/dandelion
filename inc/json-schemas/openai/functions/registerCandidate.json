@@ -1,6 +1,6 @@
 {
     "name": "registerCandidate",
-    "description": "Register candidate for MyLife",
+    "description": "Register candidate for Dandelion",
     "parameters": {
         "additionalProperties": false,
         "type": "object",

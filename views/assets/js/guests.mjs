@@ -96,13 +96,13 @@ async function mAddMessage(message, role='agent', typeDelay=mDefaultTypeDelay, c
         case 'system':
         case 'warning':
             messageThumb.src = 'png/Q.png'
-            messageThumb.alt = `Q, MyLife's Corporate Intelligence`
-            messageThumb.title = `Hi, I'm Q, MyLife's Corporate Synthetic Intelligence. I am designed to help you better understand MyLife's organization, membership, services and vision.`        
+            messageThumb.alt = `Q, Dandelion's Corporate Intelligence`
+            messageThumb.title = `Hi, I'm Q, Dandelion's Corporate Synthetic Intelligence. I am designed to help you better understand Dandelion's organization, membership, services and vision.`        
             break
         case 'agent':
             messageThumb.src = 'png/Q-alt.png'
-            messageThumb.alt = `Q, MyLife's Corporate Intelligence`
-            messageThumb.title = `Hi, I'm Q, MyLife's Corporate Synthetic Intelligence. I am designed to help you better understand MyLife's organization, membership, services and vision.`        
+            messageThumb.alt = `Q, Dandelion's Corporate Intelligence`
+            messageThumb.title = `Hi, I'm Q, Dandelion's Corporate Synthetic Intelligence. I am designed to help you better understand Dandelion's organization, membership, services and vision.`        
             break
         default:
             messageThumb.classList.add('chat-message-thumb-small')
@@ -196,7 +196,7 @@ function mCreateChallengeElement(){
     challengeSubmit.addEventListener('click', mSubmitChallenge)
     challengeSubmit.className = 'challenge-submit'
     challengeSubmit.id = 'challenge-submit'
-    challengeSubmit.innerHTML = 'Enter MyLife'
+    challengeSubmit.innerHTML = 'Enter Dandelion'
     challengeInputContainer.appendChild(challengeSubmit)
     challengeInput.appendChild(challengeInputContainer)
     /* requires challengeSubmit */
@@ -390,17 +390,17 @@ function mShareProgress(activeShareId){
     }
 }
 async function mShareStart(activeShareId){
-    const shareWelcomeText = 'Congratulations! A <i>MyLife</i> Member has shared a memory with you!<br />Please wait while I load and interpret the memory'
+    const shareWelcomeText = 'Congratulations! A <i>Dandelion</i> Member has shared a memory with you!<br />Please wait while I load and interpret the memory'
     const shareWelcome = await mAddMessage(shareWelcomeText, 'system')
     const awaitButton = mGlobals.await('Connecting with Member Avatar to retrieve memory...')
     mGlobals.addChatElement(awaitButton)
     const shareHeader = await mGlobals.datamanager.shareHeader(activeShareId)
     shareWelcome.remove()
-    const title = `<i>Prepare to experience</i>:<br />&mdash; <b>${ shareHeader.title ?? 'A MyLife Shared Memory' }</b>`
+    const title = `<i>Prepare to experience</i>:<br />&mdash; <b>${ shareHeader.title ?? 'A Dandelion Shared Memory' }</b>`
     mGlobals.expunge(awaitButton)
     const shareTitle = await mAddMessage(title, 'share')
     if(shareHeader.warnings?.length){
-        const shareWarning = `Before we proceed, <i>MyLife</i> needs to notify you that the shared content contains the following warnings: <b>${ shareHeader.warnings }</b><br />&mdash; Please confirm that you are willing to continue, or cancel out now.`
+        const shareWarning = `Before we proceed, <i>Dandelion</i> needs to notify you that the shared content contains the following warnings: <b>${ shareHeader.warnings }</b><br />&mdash; Please confirm that you are willing to continue, or cancel out now.`
         const triggerWarningBubble = await mAddMessage(shareWarning, 'warning', 4)
         /* trigger warnings */
         // @todo - move to response `input` node
@@ -531,7 +531,7 @@ async function mSubmitInput(event, message){
     event.stopPropagation()
 	event.preventDefault()
     hide(mGlobals.MemberChat)
-    const awaitButton = mGlobals.await('Connecting with MyLife...')
+    const awaitButton = mGlobals.await('Connecting with Dandelion...')
     mGlobals.addChatElement(awaitButton)
     console.log('mSubmitInput', message, awaitButton)
     const chatData = {

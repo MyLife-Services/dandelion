@@ -1,6 +1,6 @@
 {
   	"annotations": {
-		"title": "MyLife-Change-Title",
+		"title": "Dandelion-Change-Title",
 		"readOnlyHint": false,
 		"destructiveHint": true,
 		"idempotentHint": true,
@@ -24,7 +24,7 @@
       "title"
     ]
   },
-  "mylife_bots": [
+  "dandelion_bots": [
     "any"
   ],
   "name": "change_title"

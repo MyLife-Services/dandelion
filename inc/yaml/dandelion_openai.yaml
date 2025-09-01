@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: MyLife GPT Webhook Receiver API
-  description: This API is for receiving webhooks from MyLife's public GPT instance found at []().
+  title: Dandelion GPT Webhook Receiver API
+  description: This API is for receiving webhooks from Dandelion's public GPT instance found at []().
   version: 1.0.1
 servers:
   - url: https://humanremembranceproject.org/api/v1
@@ -11,9 +11,9 @@ security:
 paths:
   /register:
     post:
-      operationId: MyLifeGPTRegistration
+      operationId: DandelionGPTRegistration
       summary: Receives registration data from the GPT webhook.
-      description: Endpoint for handling incoming registration webhook data from the MyLife GPT service.
+      description: Endpoint for handling incoming registration webhook data from the Dandelion GPT service.
       requestBody:
         required: true
         content:
@@ -39,7 +39,7 @@ paths:
                       - newsletter
                       - register
                       - volunteer
-                  description: Interests in MyLife, defaults to information.
+                  description: Interests in Dandelion, defaults to information.
                 contact:
                   type: object
                   required:
@@ -65,7 +65,7 @@ paths:
                       description: Type of registration.
                       enum: ['newsletter', 'register']
                       type: string
-                  description: The registration data sent from the MyLife GPT instance.
+                  description: The registration data sent from the Dandelion GPT instance.
                 personalInterests:
                   type: array
                   default: []
@@ -83,7 +83,7 @@ paths:
                 additionalInfo:
                   type: string
                   maxLength: 1024
-                  description: Additional information sent from the MyLife GPT instance.
+                  description: Additional information sent from the Dandelion GPT instance.
       responses:
         "200":
           description: Webhook registration data received successfully.

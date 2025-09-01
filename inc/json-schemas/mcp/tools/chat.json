@@ -1,6 +1,6 @@
 {
 	"annotations": {
-		"title": "MyLife-Chat",
+		"title": "Dandelion-Chat",
 		"readOnlyHint": false,
 		"destructiveHint": true,
 		"idempotentHint": false,
@@ -23,9 +23,9 @@
             "message"
         ]
 	},
-	"mylife_bots": [
+	"dandelion_bots": [
         "any"
     ],
-	"mylife_system_access": true,
+	"dandelion_system_access": true,
     "name": "chat"
 }

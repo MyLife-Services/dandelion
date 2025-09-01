@@ -1,7 +1,7 @@
 {
-  "name": "mylife-maht",
+  "name": "dandelion",
   "version": "1.0.0",
-  "description": "Maht is a an openai model trained on MyLife corporate private and public materials to assist the Board of Directors for MyLife in governance and growth of the organization in ethical, honest, transparent and impactful ways",
+  "description": "Q is a an openai model trained on Dandelion corporate private and public materials to assist the Board of Directors for Dandelion in governance and growth of the organization in ethical, honest, transparent and impactful ways",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -29,26 +29,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MyLife-Services/mylife-maht.git"
+    "url": "git+https://github.com/MyLife-Services/dandelion.git"
   },
   "keywords": [
     "ai",
     "governance",
-    "mylife",
+    "dandelion",
     "hrp",
     "board",
     "directors",
     "executive",
     "assistant",
     "agent",
-    "maht"
+    "Q"
   ],
-  "author": "MyLife",
+  "author": "Dandelion",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MyLife-Services/mylife-maht/issues"
+    "url": "https://github.com/MyLife-Services/dandelion/issues"
   },
-  "homepage": "https://github.com/MyLife-Services/mylife-maht#readme",
+  "homepage": "https://github.com/MyLife-Services/dandelion#readme",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
     "@azure/cosmos": "^4.2.0",

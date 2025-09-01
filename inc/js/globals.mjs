@@ -17,7 +17,7 @@ const mOpenAIBotModel = process.env.OPENAI_MODEL_CORE_BOT
  * Globals class holds all of the sensitive data and functionality. It exists as a singleton.
  * @class
  * @extends EventEmitter
- * @todo - Since traced back to Maht Globals, this could be converted to the VM and hold that code
+ * @todo - Since traced back to Q Globals, this could be converted to the VM and hold that code
  */
 class Globals extends EventEmitter {
 	constructor() {
@@ -182,7 +182,7 @@ class Globals extends EventEmitter {
 	}
 	sysId(_mbr_id){
 		if(!typeof _mbr_id==='string' || !_mbr_id.length || !_mbr_id.includes('|'))
-			throw new Error('expected MyLife member id string')
+			throw new Error('expected Dandelion member id string')
 		return _mbr_id.split('|')[1]
 	}
 	sysName(_mbr_id){

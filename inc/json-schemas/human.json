@@ -23,7 +23,7 @@
 		"being": {
 			"type": "string",
 			"const": "core",
-			"description": "root constructor for human being in MyLife"
+			"description": "root constructor for human being in Dandelion"
 		},
 		"bio": {
 			"type": "string",

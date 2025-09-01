@@ -62,7 +62,7 @@
     },
     "required": ["mbr_id", "interests"]
   },
-  "preferredProviders": ["nanda", "mylife"],
+  "preferredProviders": ["nanda", "dandelion"],
   "protocol": "http/1.1",
   "version": "1.0.0"
 }

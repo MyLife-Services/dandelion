@@ -10,7 +10,7 @@ import {
  */
 async function about(ctx){
 	if(ctx.state.locked){
-		ctx.state.title = `About MyLife`
+		ctx.state.title = `About Dandelion`
 		await ctx.render('about')
 	} else {
 		const { avatar: Avatar, } = ctx.state
@@ -112,7 +112,7 @@ async function challenge(ctx, memberId, memberPassphrase){
 	if(challengeSuccessful){
 		const { Conversation, } = ctx.session
 		ctx.session.locked = false
-		ctx.session.avatar = await Avatar.mylifeMember(mid)
+		ctx.session.avatar = await Avatar.dandelionMember(mid)
 		ctx.state.avatar = ctx.session.avatar
 		if(Conversation)
 			await Avatar.deleteChat(Conversation)
@@ -147,7 +147,7 @@ async function collections(ctx){
 async function createBot(ctx){
 	const { teamId, type, } = ctx.request.body
 	const { avatar, } = ctx.state
-	const bot = { teams: [], type, } // `type` only requirement to create a known, MyLife-typed bot
+	const bot = { teams: [], type, } // `type` only requirement to create a known, Dandelion-typed bot
 	if(teamId?.length)
 		bot.teams.push(teamId)
 	ctx.body = await avatar.createBot(bot)
@@ -186,13 +186,13 @@ async function greetings(ctx){
 	if(typeof dynamic==='string')
 		dynamic = JSON.parse(dynamic)
 	const { avatar: Avatar, } = ctx.state
-	const response = validateId?.length && Avatar.isMyLife
+	const response = validateId?.length && Avatar.isDandelion
 		? await Avatar.validateRegistration(validateId)
 		: await Avatar.greeting(dynamic)
 	ctx.body = response
 }
 /**
- * Request help about MyLife.
+ * Request help about Dandelion.
  * @public
  * @async
  * @param {Koa} ctx - Koa Context object, body={ request: string|required, mbr_id, type: string, }.
@@ -236,7 +236,7 @@ async function item(ctx){
  */
 async function logout(ctx){
 	const { avatar: Avatar, } = ctx.state
-	if(!Avatar?.isMyLife ?? true)
+	if(!Avatar?.isDandelion ?? true)
 		ctx.throw(400, `cannot logout from system avatar`)
 	await Avatar.logout(ctx)
 	ctx.redirect('/')
@@ -250,7 +250,7 @@ async function logout(ctx){
  */
 async function loginSelect(ctx){
 	const { avatar, } = ctx.state
-	ctx.body = await avatar.hostedMembers(process.env.MYLIFE_HOSTING_KEY)
+	ctx.body = await avatar.hostedMembers(process.env.DANDELION_HOSTING_KEY)
 }
 async function members(ctx){ // members home
 	await ctx.render('members')
@@ -282,7 +282,7 @@ async function obscure(ctx){
  */
 async function passphraseReset(ctx){
 	const { avatar, } = ctx.state
-	if(avatar?.isMyLife ?? true)
+	if(avatar?.isDandelion ?? true)
 		ctx.throw(400, `cannot reset system passphrase`)
 	const { passphrase } = ctx.request.body
 	if(!passphrase?.length)
@@ -295,7 +295,7 @@ async function passphraseReset(ctx){
  */
 async function privacyPolicy(ctx){
 	if(ctx.state.locked){
-		ctx.state.title = `MyLife Privacy Policy`
+		ctx.state.title = `Dandelion Privacy Policy`
 		await ctx.render('privacy-policy')
 	} else {
 		const { avatar: Avatar, } = ctx.state
@@ -432,7 +432,7 @@ async function updateBotInstructions(ctx){
  */
 async function upload(ctx){
 	const { avatar, } = ctx.state
-	if(avatar.isMyLife)
+	if(avatar.isDandelion)
 		throw new Error('Only logged in members may upload files')
 	ctx.session.APIMemberKey = avatar.mbr_id
 	ctx.session.isAPIValidated = true

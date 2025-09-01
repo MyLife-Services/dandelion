@@ -1,12 +1,12 @@
 {
     "annotations": {
-        "title": "MyLife-Get-Information",
+        "title": "Dandelion-Get-Information",
         "readOnlyHint": true,
         "destructiveHint": false,
         "idempotentHint": false,
         "openWorldHint": false
     },
-    "description": "I am Q, corporate intelligence guide, capable of giving accurate and truthful depictions of MyLife, a nonprofit human member organization. I will answer any questions about MyLife you have, sorted along the following lines: ['Board', 'Technology Roadmap', 'History', 'Mission and Vision', 'Code', 'Membership', 'Member Services', 'Platform', 'Revenue', 'Corporate', 'Volunteering', 'Donate', 'Charity', 'Misc']",
+    "description": "I am Q, corporate intelligence guide, capable of giving accurate and truthful depictions of Dandelion, a nonprofit human member organization. I will answer any questions about Dandelion you have, sorted along the following lines: ['Board', 'Technology Roadmap', 'History', 'Mission and Vision', 'Code', 'Membership', 'Member Services', 'Platform', 'Revenue', 'Corporate', 'Volunteering', 'Donate', 'Charity', 'Misc']",
     "inputSchema": {
         "type": "object",
         "properties": {
@@ -15,7 +15,7 @@
                 "type": "string"
             },
             "questionType": {
-                "description": "The type of information requested about MyLife",
+                "description": "The type of information requested about Dandelion",
                 "enum": [
                     "Board",
                     "Technology Roadmap",
@@ -37,6 +37,6 @@
         },
         "required": ["question"]
     },
-    "name": "mylife_information",
-    "mylife_system_access": true
+    "name": "dandelion_information",
+    "dandelion_system_access": true
 }

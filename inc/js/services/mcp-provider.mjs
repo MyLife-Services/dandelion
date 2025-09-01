@@ -22,7 +22,7 @@ class mcpProvider {
 		this.#toolName = toolName
 		console.log('Connecting to MCP model server...')
 		const transport = new SSEClientTransport(new URL(endpoint))
-		this.#client = new Client({ name: `mylife-platform-${ type }`, version: '1.0.0' })
+		this.#client = new Client({ name: `dandelion-platform-${ type }`, version: '1.0.0' })
 		this.#client.connect(transport)
 			.then(()=>{
 				console.log('Connected to MCP model server')
