@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url'
 /* server imports */
 import Koa from 'koa'
 import { koaBody } from 'koa-body'
+import cors from '@koa/cors'
 import render from 'koa-ejs'
 import session from 'koa-generic-session'
 import serve from 'koa-static'
@@ -126,6 +127,11 @@ app.use(async (ctx, next) => {
     })(ctx, next)
 })
 	.use(serve(path.join(__dirname, 'views', 'assets')))
+	.use(cors({
+		origin: '*', // or specific origins like 'http://mylife.ngrok.app'
+		allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+		allowHeaders: ['Content-Type', 'Authorization'],
+	}))
 	.use(
 		session(	//	session initialization
 			{
