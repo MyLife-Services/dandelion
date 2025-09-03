@@ -126,12 +126,12 @@ app.use(async (ctx, next) => {
       }
     })(ctx, next)
 })
-	.use(serve(path.join(__dirname, 'views', 'assets')))
 	.use(cors({
 		origin: '*', // or specific origins like 'http://mylife.ngrok.app'
 		allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
 		allowHeaders: ['Content-Type', 'Authorization'],
 	}))
+	.use(serve(path.join(__dirname, 'views', 'assets')))
 	.use(
 		session(	//	session initialization
 			{
