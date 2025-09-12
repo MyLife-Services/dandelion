@@ -75,6 +75,26 @@ const mimeTypesToExtensions = {
 }
 const serverRouter = await Q.router
 console.log(chalk.bgBlue('created-system-avatar:', chalk.bgRedBright('Q'), chalk.bgGreenBright(Q.version)))
+const cookieConfig = {
+	httpOnly: true,
+	maxAge: parseInt(process.env.DANDELION_SESSION_TIMEOUT_MS) || 900000, // session lifetime in milliseconds
+	overwrite: true,
+	sameSite: 'none',
+	secure: true,
+	signed: true,
+}
+const cookieKey = 'dandelion.sid'
+const sessionPrefix = 'dandelion:sess:'
+const sessionConfig = {
+	allowEmpty: false,
+	cookie: cookieConfig,
+	key: cookieKey,
+	prefix: sessionPrefix,
+	autoCommit: true,
+	rolling: false,
+	renew: true,
+	store: MemoryStore,
+}
 /** RESERVED: test harness **/
 /** application startup **/
 render(app, {
@@ -103,6 +123,7 @@ app.keys = [
 	process.env.DANDELION_SESSION_KEY
 		?? `dandelion-session-failsafe|${ Q.newGuid }`
 ]
+app.proxy = process.env.DANDELION_DEV === 'true' || process.env.DANDELION_PROXY === 'true'
 app.use(async (ctx, next) => {
     await koaBody({
       multipart: true,
@@ -127,26 +148,13 @@ app.use(async (ctx, next) => {
     })(ctx, next)
 })
 	.use(cors({
-		origin: '*', // or specific origins like 'http://mylife.ngrok.app'
+		origin: ctx => ctx.request.header.origin || 'https://mylife.ngrok.app',
+		credentials: true,
 		allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
-		allowHeaders: ['Content-Type', 'Authorization'],
+		allowHeaders: ['Content-Type', 'Authorization']
 	}))
 	.use(serve(path.join(__dirname, 'views', 'assets')))
-	.use(
-		session(	//	session initialization
-			{
-				key: 'dandelion.sid',   // cookie session id
-				maxAge: parseInt(process.env.DANDELION_SESSION_TIMEOUT_MS) || 900000, // session lifetime in milliseconds
-				autoCommit: true,
-				overwrite: true,
-				httpOnly: false,
-				signed: true,
-				rolling: false,
-				renew: true,
-				store: MemoryStore,
-			},
-			app
-		))
+	.use(session(sessionConfig,app))
 	.use(async (ctx,next) => { // GLOBAL ERROR `.catch()` to present in ctx format.
 		try {
 			await next()
@@ -172,9 +180,6 @@ app.use(async (ctx, next) => {
 		ctx.state.version = ctx.SystemAvatar.version
 		await next()
 	})
-	.use(async(ctx,next) => { // alert check
-		await next()
-	})
 //	.use(DandelionMemberRouter.routes())	//	enable member routes
 //	.use(DandelionMemberRouter.allowedMethods())	//	enable member routes
 	.use(serverRouter.routes())	//	enable system routes
@@ -190,7 +195,7 @@ const sessionCheckInterval = 10 * 60 * 1000 // every 10 minutes
 setInterval(async _=>{
     for(const [sessionId, sessionMeta] of app.context.mcpSessionMeta){
 		const { sessionIdKoa, } = sessionMeta
-        const koaSess = await app.context.MemoryStore.get(`koa:sess:${ sessionIdKoa }`)
+        const koaSess = await app.context.MemoryStore.get(sessionPrefix + sessionIdKoa)
         if(!koaSess){
 			app.context.mcpSessionMeta.delete(sessionId)
 			console.log(`⏱️ Removed meta session for ${ sessionId }`, sessionIdKoa)
