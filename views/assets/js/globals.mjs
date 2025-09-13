@@ -53,9 +53,10 @@ class Datamanager {
     /**
      * Creates a new Datamanager.
      * @param {String} type - The type of user, defaults to 'guest'
+     * @param {String} url - The base url, defaults to `window.location.origin`
      */
-    constructor(type='guest'){
-        this.#url = window.location.origin
+    constructor(type='guest', url=window.location.origin){
+        this.#url = url
         switch(type){
             case 'member':
                 this.#url += '/member'
@@ -66,15 +67,16 @@ class Datamanager {
         }
     }
     /* private functions */
-    async #fetch(url='', options){
+    async #fetch(url='', options={}){
         let response
+        options.credentials = 'include'
+        url = url.startsWith('/')
+            ? url
+            : `/${ url }`
+        url = this.#url + url
         try {
-            url = url.startsWith('/')
-                ? url
-                : `/${url}`
-            url = this.#url + url
             response = await fetch(url, options)
-            if(response.status>=400 && response.status < 500)
+            if(response.status >= 400 && response.status < 500)
                 window.location.href = response?.redirectUrl
                     ?? '/'
             else
@@ -101,8 +103,14 @@ class Datamanager {
     async alerts(){
         const url = `alerts`
         const responses = await this.#fetch(url)
-        responses.forEach(response=>mAlertCreate(response))
+        if(Array.isArray(responses)) /* otherwise error object */
+            responses.forEach(response=>mAlertCreate(response))
         return responses
+    }
+    async authenticationStatus(){
+        const url = `/status`
+        const response = await this.#fetch(url)
+        return response
     }
     async availableMissions(){
         const url = `/alphadog/missions/available`
@@ -601,6 +609,12 @@ class Datamanager {
         const response = await this.#fetch(url, options)
         return response
     }
+    /**
+     * Submits the email/Member ID and passphrase for authentication.
+     * @param {String} passphrase - The passphrase to submit
+     * @param {String} mbr_id - The member ID
+     * @returns {Promise<Boolean>} - Whether or not the passphrase was accepted
+     */
     async submitPassphrase(passphrase, mbr_id){
         const url = `/challenge/${ mbr_id }`
         const options = {
@@ -612,7 +626,15 @@ class Datamanager {
         }
         const response = await this.#fetch(url, options)
         return response
-    }
+    }/**
+     * Submits the registration data.
+     * @param {Object} signupData - The signup data object
+     * @property {string} avatarName - The avatar name
+     * @property {string} email - The email address
+     * @property {string} humanName - The human name
+     * @property {string} type - The type *optional='newsletter'
+     * @returns {Promise<Boolean>} - Whether or not the signup was successful
+     */
     async submitSignup(signupData){
         const url = `signup`
         const options = {
@@ -689,7 +711,7 @@ class Datamanager {
 }
 class Globals {
     #uuid = mNewGuid()
-    constructor(){
+    constructor(type='guest', url=window.location.origin){
         if(!mLoaded){
             /* constants */
             mAvatarName = this.getAvatar()?.name
@@ -703,7 +725,7 @@ class Globals {
             mChatInputField = document.getElementById('chat-input-text')
             mChatSubmit = document.getElementById('chat-input-submit')
             mChatSystem = document.getElementById('chat-system')
-            mDatamanager = new Datamanager()
+            mDatamanager = new Datamanager(type, url)
             mHelpAwait = document.getElementById('help-await')
             mHelpClose = document.getElementById('help-close')
             mHelpContainer = document.getElementById('help-container')
