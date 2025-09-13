@@ -2964,6 +2964,7 @@ function mPruneItem(item){
         assistantType,
         being,
         complete=false,
+        createdAt=item._ts,
         form,
         id,
         keywords,
@@ -2975,11 +2976,13 @@ function mPruneItem(item){
         title,
         type,
         version=1.0,
+        _ts: updatedAt,
     } = item
     item = {
         assistantType,
         being,
         complete,
+        createdAt,
         form,
         id,
         keywords,
@@ -2990,6 +2993,7 @@ function mPruneItem(item){
         summary,
         title,
         type,
+        updatedAt,
         version,
     }
     return item
