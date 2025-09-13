@@ -155,10 +155,12 @@ class Datamanager {
 		const { being, id, mbr_id, } = item
 		if(!being?.length)
 			throw new Error('property `being` is required')
-		if(!id?.length)
-			item.id = this.globals.newGuid
+		item.id = id?.length ? id : this.globals.newGuid
 		if(!mbr_id?.length)
 			item.mbr_id = this.#partitionId
+		/* forced defaults */
+		item.createdAt = Date.now() // **note**: updatedAt is default _ts
+		/* write item */
 		const { resource: doc } = await this.#containers[containerId]
 			.items
 			.upsert(item)
